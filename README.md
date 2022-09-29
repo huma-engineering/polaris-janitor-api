@@ -1,3 +1,6 @@
+# Announcement :loudspeaker: 
+
+This repository is transferred from [gdm-SynseneHealth](https://github.com/sensynehealth/polaris-janitor-api) to Huma organisation as part of change in asset ownership 
 <!-- Title - A concise title for the service that fits the pattern identified and in use across all services. -->
 # Polaris Janitor API
 
