@@ -401,8 +401,6 @@ services:
     container_name: "dhos-janitor-api"
     build:
       context: ../
-      args:
-        - GEMFURY_DOWNLOAD_KEY
     environment:
       <<: *COMMON_ENVIRONMENT
       EXTERNAL_URL: http://dhos-janitor-api:5000
