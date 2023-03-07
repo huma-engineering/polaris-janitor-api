@@ -31,7 +31,10 @@ jobs:
           key: v1-poetry-deps-${{ hashFiles('**/poetry.lock', '**/tox.ini') }}
           restore-keys: v1-poetry-deps-
       - name: Run tox tests
-        run: tox -e py39
+        run: |
+          eval `ssh-agent -s`
+          ssh-add - <<< "${{ secrets.DEPLOY_KEY_PRIVATE }}"
+          tox -e py39
       - name: Archive code coverage results
         uses: actions/upload-artifact@v3
         with:
