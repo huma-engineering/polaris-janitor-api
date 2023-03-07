@@ -6,10 +6,6 @@ authors = ["Ian Simpson <ian.simpson@sensynehealth.com>"]
 keywords = ["Swagger", "Janitor", "Reset"]
 repository = "https://github.com/draysontechnologies/dhos-janitor-api"
 
-[[tool.poetry.source]]
-name = "sensynehealth"
-url = "https://pypi.fury.io/sensynehealth/"
-
 [tool.poetry.dependencies]
 python = "^3.9,<3.10"
 auth0-api-client = "1.*"
@@ -19,7 +15,7 @@ faker = "4.*"
 flask-batteries-included = {version = "3.*", extras = ["apispec"]}
 httpx = "0.*"
 python-jose = "3.*"
-she-data-generation = "1.*"
+she-data-generation = {git = "git@github.com:huma-engineering/she-data-generation.git"}
 she-logging = "1.*"
 
 [tool.poetry.dev-dependencies]
