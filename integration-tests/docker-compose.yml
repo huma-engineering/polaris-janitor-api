@@ -401,6 +401,8 @@ services:
     container_name: "dhos-janitor-api"
     build:
       context: ../
+      ssh:
+        - ed=$DOCKER_SSH
     environment:
       <<: *COMMON_ENVIRONMENT
       EXTERNAL_URL: http://dhos-janitor-api:5000
