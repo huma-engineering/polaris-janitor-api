@@ -465,7 +465,7 @@ services:
 
   send-bff:
     container_name: "send-bff"
-    image: "sensynehealth.azurecr.io/send/send-bff:dev"
+    image: "humagdmacr.azurecr.io/send/send-bff:dev"
     environment:
       <<: *COMMON_ENVIRONMENT
       DHOS_ENCOUNTERS_API_HOST: http://dhos-encounters-api:5000
@@ -499,7 +499,7 @@ services:
   
   gdm-bff:
     container_name: "gdm-bff"
-    image: "sensynehealth.azurecr.io/gdm/gdm-bff:dev"
+    image: "humagdmacr.azurecr.io/gdm/gdm-bff:dev"
     environment:
       <<: *COMMON_ENVIRONMENT
       DHOS_ACTIVATION_AUTH_API_HOST: http://dhos-activation-auth-api:5000
@@ -541,7 +541,7 @@ services:
 
   dhos-async-adapter:
     container_name: "dhos-async-adapter"
-    image: "sensynehealth.azurecr.io/dhos/dhos-async-adapter:dev"
+    image: "humagdmacr.azurecr.io/dhos/dhos-async-adapter:dev"
     volumes:
       - app-volume:/app
     environment:
@@ -555,7 +555,7 @@ services:
 
   dhos-services-api:
     container_name: "dhos-services-api"
-    image: "sensynehealth.azurecr.io/dhos/dhos-services-api:dev"
+    image: "humagdmacr.azurecr.io/dhos/dhos-services-api:dev"
     environment:
       <<: *COMMON_ENVIRONMENT
       EXTERNAL_URL: http://dhos-services-api:5000
@@ -592,7 +592,7 @@ services:
 
   dhos-activation-auth-api:
     container_name: "dhos-activation-auth-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-activation-auth-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-activation-auth-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: dhos-activation-auth-api
@@ -612,7 +612,7 @@ services:
 
   dhos-encounters-api:
     container_name: "dhos-encounters-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-encounters-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-encounters-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: dhos-encounters-api
@@ -628,7 +628,7 @@ services:
 
   dhos-locations-api:
     container_name: "dhos-locations-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-locations-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-locations-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       AUTH0_AUDIENCE: http://localhost/
@@ -644,7 +644,7 @@ services:
 
   dhos-questions-api:
     container_name: "dhos-questions-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-questions-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-questions-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: dhos-questions-api
@@ -658,7 +658,7 @@ services:
 
   dhos-observations-api:
     container_name: "dhos-observations-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-observations-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-observations-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: dhos-observations-api
@@ -674,7 +674,7 @@ services:
   
   gdm-bg-readings-api:
     container_name: "gdm-bg-readings-api"
-    image: sensynehealth.azurecr.io/gdm/gdm-bg-readings-api:dev
+    image: humagdmacr.azurecr.io/gdm/gdm-bg-readings-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: gdm-bg-readings-api
@@ -691,7 +691,7 @@ services:
 
   dhos-rules-api:
     container_name: "dhos-rules-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-rules-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-rules-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DHOS_RULES_ENGINE_URL: http://dhos-rules-engine:3000
@@ -702,11 +702,11 @@ services:
 
   dhos-rules-engine:
     container_name: "dhos-rules-engine"
-    image: sensynehealth.azurecr.io/dhos/dhos-rules-engine:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-rules-engine:dev
 
   dhos-url-api:
     container_name: "dhos-url-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-url-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-url-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: dhos-url-api
@@ -720,7 +720,7 @@ services:
 
   dhos-users-api:
     container_name: "dhos-users-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-users-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-users-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DISABLE_CREATE_USER_IN_AUTH0: "True"
@@ -746,7 +746,7 @@ services:
 
   dhos-fuego-api:
     container_name: "dhos-fuego-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-fuego-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-fuego-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       DATABASE_NAME: dhos-fuego-api
@@ -823,7 +823,7 @@ services:
 
   dhos-hapi-fhir-api:
     container_name: "dhos-hapi-fhir-api"
-    image: sensynehealth.azurecr.io/dhos/dhos-hapi-fhir-api:dev
+    image: humagdmacr.azurecr.io/dhos/dhos-hapi-fhir-api:dev
     environment:
       <<: *COMMON_ENVIRONMENT
       spring.datasource.url: jdbc:postgresql://postgres-db:5432/dhos-hapi-fhir-api
