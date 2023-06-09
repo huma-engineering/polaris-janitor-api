@@ -1,0 +1,74 @@
+name: Push Image to GHCR
+description: Push Image to GHCR
+
+inputs:
+  github_token:
+    required: true
+    description: GitHub Token
+  service:
+    required: true
+    description: Service name
+  folder:
+    description: Service name
+  username:
+    required: true
+    description: Username
+  repo_base:
+    required: true
+    description: Repo base
+  docker_registry:
+    description: Docker registry
+    default: ghcr.io
+  owner:
+    required: true
+    description: GitHub Owner
+  dispatch_token:
+    required: true
+    description: Dispatch Token
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - name: Log in to the GitHub Packages
+      uses: docker/login-action@v2
+      with:
+        registry: ${{ inputs.docker_registry }}
+        username: ${{ inputs.username }}
+        password: ${{ inputs.github_token }}
+    - uses: zwaldowski/semver-release-action@v3
+      id: next_version
+      with:
+        bump: prepatch
+        prefix: ${{ inputs.service }}-r
+        github_token: ${{ inputs.github_token }}
+    - name: Extract metadata (tags, labels) for Docker
+      id: meta
+      uses: docker/metadata-action@v4
+      with:
+        images: ${{ inputs.docker_registry }}/${{ inputs.repo_base }}/${{ inputs.service }}
+        labels: |
+          org.opencontainers.image.title=r${{ steps.next_version.outputs.version }}
+          org.opencontainers.image.description=${{ inputs.service }}
+          org.opencontainers.image.vendor=${{ inputs.owner }}
+        tags: |
+          type=raw,value=r${{ steps.next_version.outputs.version }}
+          type=semver,pattern=${{ steps.next_version.outputs.version }}
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v3
+      with:
+        context: ${{ inputs.folder || inputs.service }}/.
+        push: true
+        tags: ${{ steps.meta.outputs.tags }}
+        labels: ${{ steps.meta.outputs.labels }}
+    - name: Dispatch to workflows
+      shell: bash
+      run: |
+        # for custom or composed services, like trustomer-files, create a input for dispatch_service, 
+        # and the image_tag field name to update in the values-xx.yaml filesystem
+        
+        curl -H "Accept: application/vnd.github.everest-preview+json" \
+        -H "Authorization: token ${{ inputs.dispatch_token }}" \
+        --request POST \
+        --data '{"event_type": "bump_package_version", "client_payload": { "service": "${{ inputs.service }}", "version": "r${{ steps.next_version.outputs.version }}" }}' \
+        https://api.github.com/repos/huma-engineering/sensyne-app-deployment/dispatches
