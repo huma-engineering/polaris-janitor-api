@@ -1485,26 +1485,6 @@ testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-202
 testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
 
 [[package]]
-name = "she-data-generation"
-version = "0.0.0"
-description = "Data generation for test code"
-category = "main"
-optional = false
-python-versions = "^3.8"
-files = []
-develop = false
-
-[package.dependencies]
-draymed = "2.*"
-faker = "4.*"
-
-[package.source]
-type = "git"
-url = "git@github.com:huma-engineering/she-data-generation.git"
-reference = "HEAD"
-resolved_reference = "c5437fae18f8dc98683be95a20e0f3683d9436e3"
-
-[[package]]
 name = "she-logging"
 version = "1.4.1"
 description = "Common logging configuration for Polaris microservices"
