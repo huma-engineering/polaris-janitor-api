@@ -52,19 +52,15 @@ class Configuration:
         "dhos_services_api": "DHOS_SERVICES_API",
         "dhos_activation_auth_api": "DHOS_ACTIVATION_AUTH_API",
         "dhos_audit_api": "DHOS_AUDIT_API",
-        "dhos_encounters_api": "DHOS_ENCOUNTERS_API",
-        "dhos_fuego_api": "DHOS_FUEGO_API",
         "dhos_messages_api": "DHOS_MESSAGES_API",
         "dhos_questions_api": "DHOS_QUESTIONS_API",
         "dhos_telemetry_api": "DHOS_TELEMETRY_API",
         "gdm_bg_readings_api": "GDM_BG_READINGS_API",
-        "dhos_observations_api": "DHOS_OBSERVATIONS_API",
     }
 
     # Targets for API calls including those we don't want to reset.
     ALL_TARGETS = {
         "gdm_bff": "GDM_BFF",
-        "send_bff": "SEND_BFF",
         "dhos_medications_api": "DHOS_MEDICATIONS_API",
         "dhos_trustomer_api": "DHOS_TRUSTOMER_API",
         "dhos_url_api": "DHOS_URL_API",
