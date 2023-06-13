@@ -13,7 +13,6 @@ class Configuration:
     DHOS_LOCATIONS_API: str = env.str("DHOS_LOCATIONS_API")
     DHOS_MEDICATIONS_API: str = env.str("DHOS_MEDICATIONS_API")
     DHOS_MESSAGES_API: str = env.str("DHOS_MESSAGES_API")
-    DHOS_OBSERVATIONS_API: str = env.str("DHOS_OBSERVATIONS_API")
     DHOS_QUESTIONS_API: str = env.str("DHOS_QUESTIONS_API")
     DHOS_SERVICES_API: str = env.str("DHOS_SERVICES_API")
     DHOS_USERS_API: str = env.str("DHOS_USERS_API")
@@ -84,12 +83,8 @@ def resettable_targets(
         unknown_targets = targets - Configuration.RESETTABLE_TARGETS.keys()
         if unknown_targets:
             raise ValueError(f"Unknown microservices '{','.join(unknown_targets)}'")
-        if not use_epr_integration and "dhos_fuego_api" in targets:
-            raise ValueError(f"EPR integration is disabled, can't reset dhos-fuego-api")
     else:
         targets = set(Configuration.RESETTABLE_TARGETS.keys())
-        if not use_epr_integration:
-            targets.remove("dhos_fuego_api")
 
     for target in Configuration.RESETTABLE_TARGETS:
         if target in targets:

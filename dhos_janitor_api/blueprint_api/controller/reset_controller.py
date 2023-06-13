@@ -1,8 +1,7 @@
 import json
-import math
 import random
 import uuid
-from datetime import date, datetime, timedelta, timezone
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -21,13 +20,10 @@ from she_logging.request_id import current_request_id
 from dhos_janitor_api.blueprint_api.client import (
     ClientRepository,
     activation_auth_client,
-    encounters_client,
-    fuego_client,
     gdm_bff_client,
     locations_client,
     messages_client,
     questions_client,
-    send_bff_client,
     services_client,
     telemetry_client,
     trustomer_client,
@@ -37,14 +33,7 @@ from dhos_janitor_api.blueprint_api.controller import (
     auth_controller,
     generator_controller,
 )
-from dhos_janitor_api.blueprint_api.generator.encounter_generator import (
-    EncountersGenerator,
-)
 from dhos_janitor_api.blueprint_api.generator.message_generator import MessageGenerator
-from dhos_janitor_api.blueprint_api.generator.observations_generator import (
-    ObservationsGenerator,
-    Trajectory,
-)
 from dhos_janitor_api.blueprint_api.generator.readings_generator import (
     ReadingsGenerator,
 )
@@ -198,12 +187,6 @@ def populate_service(
         populate_dhos_questions(clients=clients)
     elif target == "dhos_telemetry_api":
         populate_dhos_telemetry(clients=clients)
-    elif target == "dhos_encounters_api":  # Data dropped through dhos-services
-        populate_dhos_encounters(clients=clients)
-    elif target == "dhos_observations_api":
-        populate_dhos_observations(clients=clients)
-    elif target == "dhos_fuego_api":
-        populate_dhos_fuego(clients=clients)
     elif target == "dhos_audit_api":
         logger.critical("No populate to perform for target %s", target)
     else:
@@ -723,186 +706,11 @@ def populate_dhos_telemetry(clients: ClientRepository) -> None:
         )
 
 
-def populate_dhos_encounters(clients: ClientRepository) -> None:
-    def _discharge_date_for_spo2_history_change(encounter: Dict) -> datetime:
-        if encounter["discharged_at"] is None:
-            return datetime.utcnow().replace(tzinfo=timezone.utc)
-        discharge_date = parse_iso8601_to_datetime(encounter["discharged_at"])
-        if discharge_date is None:
-            raise ValueError("Couldn't convert discharge date")
-        return discharge_date
-
-    system_jwt = auth_controller.get_system_jwt()
-    patients = services_client.search_patients(
-        clients=clients,
-        system_jwt=system_jwt,
-        product_name="SEND",
-        active=True,
-    )
-    generator = EncountersGenerator(
-        clients=clients,
-        system_jwt=system_jwt,
-        ward_sct_code=WARD_SCT_CODE,
-        bay_sct_code=BAY_SCT_CODE,
-        bed_sct_code=BED_SCT_CODE,
-    )
-    clinician_jwt = _get_stan_lee_jwt()
-
-    for patient in patients:
-        num_encounters: int = random.randint(0, 5)
-
-        for i in range(num_encounters):
-            discharged: bool = i < (num_encounters - 1)
-            encounter = generator.generate_data_for_patient(patient, discharged)
-            encounter = encounters_client.create_encounter(
-                clients=clients,
-                encounter=encounter,
-                clinician_jwt=clinician_jwt,
-            )
-            encounter_id: str = encounter["uuid"]
-            if random.random() > 0.7:
-                discharged_date: datetime = _discharge_date_for_spo2_history_change(
-                    encounter
-                )
-                admitted_at_iso8601 = parse_iso8601_to_datetime(
-                    encounter["admitted_at"]
-                )
-                if admitted_at_iso8601 is None:
-                    raise ValueError("No admission datetime")
-                days_in_hospital: timedelta = discharged_date - admitted_at_iso8601
-                number_of_scale_changes: int = math.floor(
-                    days_in_hospital.days / DAYS_BETWEEN_SPO2_SCALE_CHANGE
-                )
-                minimum_spo2_scale_date: datetime = admitted_at_iso8601
-                for scale_calculated_index in range(number_of_scale_changes):
-                    day_gap_between_scale_changes: float = (
-                        DAYS_BETWEEN_SPO2_SCALE_CHANGE
-                    )
-                    if number_of_scale_changes == 1:
-                        day_gap_between_scale_changes = days_in_hospital.days / 2
-                    minimum_spo2_scale_date = minimum_spo2_scale_date + timedelta(
-                        days=day_gap_between_scale_changes
-                    )
-                    spo2_scale: int = 2 if scale_calculated_index % 2 == 0 else 1
-                    spo2_history = encounters_client.update_spo2_scale(
-                        clients=clients,
-                        encounter_id=encounter_id,
-                        spo2_scale=spo2_scale,
-                        clinician_jwt=clinician_jwt,
-                    )
-                    minimum_spo2_scale_date = encounters_client.update_spo2_history(
-                        clients=clients,
-                        score_system_history_id=spo2_history["uuid"],
-                        spo2_scale_time=minimum_spo2_scale_date,
-                        system_jwt=system_jwt,
-                    )
-
-
 def _get_stan_lee_jwt() -> str:
     return auth_controller.get_clinician_jwt(
         "stan.lee@mail.com",
         GENERATED_CLINICIAN_PASSWORD,
         clinician_uuid="static_clinician_uuid_G",
-    )
-
-
-def populate_dhos_observations(clients: ClientRepository) -> None:
-    logger.debug("Getting SEND locations")
-    system_jwt = auth_controller.get_system_jwt()
-    locations = locations_client.get_all_locations(
-        clients=clients,
-        product_name="SEND",
-        system_jwt=system_jwt,
-        location_types=["225746001"],
-    )
-    logger.debug("Got %d locations", len(locations))
-    i_loc = 0
-    for location_uuid, location in locations.items():
-        encounters: List[Dict] = send_bff_client.search_encounters(
-            clients=clients, location_uuid=location_uuid, system_jwt=system_jwt
-        )["results"]
-        logger.debug(
-            "(Location %d/%d) Got %d encounters at location %s",
-            i_loc,
-            len(locations),
-            len(encounters),
-            location["display_name"],
-        )
-        for i_enc, encounter in enumerate(encounters):
-            logger.debug(
-                "(%d/%d) Posting observations for encounter with UUID %s",
-                i_enc,
-                len(encounters),
-                encounter["encounter_uuid"],
-            )
-            _populate_observations(clients, encounter)
-        i_loc += 1
-
-
-def populate_dhos_fuego(clients: ClientRepository) -> None:
-    system_jwt = auth_controller.get_system_jwt()
-    logger.debug("Populating dhos-fuego-api (FHIR EPR) with GDm patients")
-
-    # we get patients from dhos-services and will use ALL of them that are
-    #   active to populate FHIR EPR
-    gdm_patients = services_client.search_patients(
-        clients=clients,
-        product_name="GDM",
-        active=True,
-        system_jwt=system_jwt,
-    )
-
-    # as dhos-services patient format differs from the one in dhos-fuego,
-    #   we should transform it
-    fhir_gdm_patients: List[Dict] = [
-        generator_controller.generate_fhir_patient_from_dhos_services_patient(p)
-        for p in gdm_patients
-    ]
-
-    logger.debug(
-        "Populating dhos-fuego-api (FHIR EPR) with %d GDm patients",
-        len(fhir_gdm_patients),
-    )
-
-    if len(fhir_gdm_patients) != len(gdm_patients):
-        raise ValueError("Patients quantity mismatch!")
-
-    fhir_patients_posted: List[Dict] = []
-    for fhir_dhos_services_patient in fhir_gdm_patients:
-        fhir_patient = fuego_client.create_fhir_patient(
-            clients=clients,
-            fhir_patient=fhir_dhos_services_patient,
-            system_jwt=system_jwt,
-        )
-        fhir_patients_posted.append(fhir_patient)
-
-    if len(fhir_patients_posted) != len(fhir_gdm_patients):
-        raise ValueError("Patients quantity mismatch!")
-
-    # now we should update dhos-services patients, providing fhir_resource_id
-    logger.debug("Updating dhos-services patients with fhir_resource_id")
-    fhir_posted: Dict = {p.pop("mrn"): p for p in fhir_patients_posted}
-    for patient in gdm_patients:
-        if patient["hospital_number"] not in fhir_posted:
-            continue
-
-        patient_details = {
-            "fhir_resource_id": fhir_posted[patient["hospital_number"]][
-                "fhir_resource_id"
-            ]
-        }
-
-        logger.debug("Updating patient %s", patient["uuid"], extra=patient_details)
-        services_client.update_patient(
-            clients=clients,
-            patient_id=patient["uuid"],
-            patient_details=patient_details,
-            jwt=system_jwt,
-        )
-
-    logger.debug(
-        "dhos-fuego-api has been successfully populated with %d patients",
-        len(fhir_patients_posted),
     )
 
 
@@ -974,65 +782,3 @@ def _open_and_closed_patients(
         for _ in range(num_closed_patients)
     ]
     return patients
-
-
-def _populate_observations(clients: ClientRepository, encounter: Dict) -> None:
-    admission_time = parse_iso8601_to_datetime(encounter["admitted_at"])
-    if admission_time is None:
-        raise ValueError("No admission time in encounter")
-    admission_time = admission_time + timedelta(microseconds=500)
-    current_time = datetime.utcnow().replace(tzinfo=timezone.utc)
-    if encounter["discharged_at"] is not None:
-        discharged_at = parse_iso8601_to_datetime(encounter["discharged_at"])
-        if discharged_at is None:
-            raise ValueError("Couldn't convert discharged_at timestamp")
-        current_time = discharged_at - timedelta(microseconds=500)
-
-    current_spo2_scale: int = encounter.get("spo2_scale", 1)
-    logger.debug("Creating patient observations")
-    clinician_jwt: str = _get_stan_lee_jwt()
-
-    patient_trajectory: Trajectory = ObservationsGenerator.get_random_trajectory()
-
-    obs_sets: List[Dict] = []
-
-    rand_num_of_obs = random.choice(WEIGHTED_RANDOM)
-    while current_time > admission_time and (len(obs_sets)) < rand_num_of_obs:
-
-        if patient_trajectory == Trajectory.VERY_ILL:
-            gap_minutes = random.randint(15, 90)
-        elif patient_trajectory == Trajectory.MEDIUM_ILL:
-            gap_minutes = random.randint(90, 3 * 60)
-        elif patient_trajectory == Trajectory.A_BIT_ILL:
-            gap_minutes = random.randint(3 * 60, 8 * 60)
-        else:
-            gap_minutes = random.randint(8 * 60, 24 * 60)
-        current_time -= timedelta(minutes=gap_minutes)
-
-        if random.random() > 0.9:
-            # 10% chance of missed observations.
-            continue
-
-        current_obs_set: Dict = ObservationsGenerator.generate(
-            encounter_id=encounter["encounter_uuid"],
-            record_time=current_time,
-            trajectory=patient_trajectory,
-            current_spo2_scale=current_spo2_scale,
-        )
-        # If the observations are empty, skip them this time.
-        if not current_obs_set.get("observations", []):
-            logger.debug("No obs in set, skipping")
-            continue
-
-        obs_sets.append(current_obs_set)
-
-    logger.debug("Posting %d observation sets", len(obs_sets))
-    for idx, obs_set in enumerate(obs_sets):
-        logger.debug("Posting observation set %d/%d", idx + 1, len(obs_sets))
-        should_suppress = idx < len(obs_sets) - 1
-        send_bff_client.create_observation(
-            clients=clients,
-            obs_set=obs_set,
-            suppress_obs_publish=should_suppress,
-            clinician_jwt=clinician_jwt,
-        )
