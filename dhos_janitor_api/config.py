@@ -10,8 +10,6 @@ class Configuration:
     env = Env()
     DHOS_ACTIVATION_AUTH_API: str = env.str("DHOS_ACTIVATION_AUTH_API")
     DHOS_AUDIT_API: str = env.str("DHOS_AUDIT_API")
-    DHOS_ENCOUNTERS_API: str = env.str("DHOS_ENCOUNTERS_API")
-    DHOS_FUEGO_API: str = env.str("DHOS_FUEGO_API")
     DHOS_LOCATIONS_API: str = env.str("DHOS_LOCATIONS_API")
     DHOS_MEDICATIONS_API: str = env.str("DHOS_MEDICATIONS_API")
     DHOS_MESSAGES_API: str = env.str("DHOS_MESSAGES_API")
@@ -25,7 +23,6 @@ class Configuration:
     GDM_ARTICLES_API: str = env.str("GDM_ARTICLES_API")
     GDM_BG_READINGS_API: str = env.str("GDM_BG_READINGS_API")
     GDM_BFF: str = env.str("GDM_BFF")
-    SEND_BFF: str = env.str("SEND_BFF")
 
     HS_KEY: str = env.str("HS_KEY")
     PROXY_URL: str = env.str("PROXY_URL").rstrip("/") + "/"

@@ -8,12 +8,9 @@ from flask import Flask
 class ClientRepository:
     dhos_activation_auth_api: httpx.Client
     dhos_audit_api: httpx.Client
-    dhos_encounters_api: httpx.Client
-    dhos_fuego_api: httpx.Client
     dhos_locations_api: httpx.Client
     dhos_medications_api: httpx.Client
     dhos_messages_api: httpx.Client
-    dhos_observations_api: httpx.Client
     dhos_questions_api: httpx.Client
     dhos_services_api: httpx.Client
     dhos_users_api: httpx.Client
@@ -23,7 +20,6 @@ class ClientRepository:
     gdm_articles_api: httpx.Client
     gdm_bg_readings_api: httpx.Client
     gdm_bff: httpx.Client
-    send_bff: httpx.Client
 
     @classmethod
     def from_app(cls, app: Flask) -> "ClientRepository":
