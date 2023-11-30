@@ -11,7 +11,7 @@ from dhos_janitor_api.blueprint_api.client import ClientRepository, questions_cl
 
 
 @pytest.mark.usefixtures("mock_system_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_QUESTIONS_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestQuestionsClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -24,7 +24,9 @@ class TestQuestionsClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_create_question_type = respx_mock.post(url="/dhos/v1/question_type").mock(
+        mock_create_question_type = respx_mock.post(
+            url="/gdm/v1/internal/question_type"
+        ).mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={},
@@ -33,9 +35,9 @@ class TestQuestionsClient:
 
         actual = questions_client.create_question_type(clients, {}, system_jwt)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_questions_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/question_type",
+            url="/gdm/v1/internal/question_type",
             json={},
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
@@ -51,7 +53,7 @@ class TestQuestionsClient:
         spy_make_request: Mock,
     ) -> None:
         mock_create_question_option_type = respx_mock.post(
-            url="/dhos/v1/question_option_type"
+            url="/gdm/v1/internal/question_option_type"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -61,9 +63,9 @@ class TestQuestionsClient:
 
         actual = questions_client.create_question_option_type(clients, {}, system_jwt)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_questions_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/question_option_type",
+            url="/gdm/v1/internal/question_option_type",
             json={},
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
@@ -78,7 +80,7 @@ class TestQuestionsClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_create_question = respx_mock.post(url="/dhos/v1/question").mock(
+        mock_create_question = respx_mock.post(url="/gdm/v1/internal/question").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={},
@@ -87,9 +89,9 @@ class TestQuestionsClient:
 
         actual = questions_client.create_question(clients, {}, system_jwt)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_questions_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/question",
+            url="/gdm/v1/internal/question",
             json={},
             headers={"Authorization": f"Bearer {system_jwt}"},
         )

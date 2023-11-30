@@ -12,7 +12,7 @@ from dhos_janitor_api.blueprint_api.client import telemetry_client
 
 
 @pytest.mark.usefixtures("mock_patient_jwt", "mock_clinician_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_TELEMETRY_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestTelemetryClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -27,7 +27,7 @@ class TestTelemetryClient:
         patient_jwt: str,
     ) -> None:
         mock_create_patient_installation = respx_mock.post(
-            url=f"/dhos/v1/patient/{patient_id}/installation"
+            url=f"/gdm/v1/patient/{patient_id}/installation"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -39,9 +39,9 @@ class TestTelemetryClient:
             clients, patient_id, {}, patient_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_telemetry_api,
+            client=clients.gdm_bff,
             method="post",
-            url=f"/dhos/v1/patient/{patient_id}/installation",
+            url=f"/gdm/v1/patient/{patient_id}/installation",
             json={},
             headers={"Authorization": f"Bearer {patient_jwt}"},
         )
@@ -58,7 +58,7 @@ class TestTelemetryClient:
     ) -> None:
         clinician_id = "123"
         mock_create_clinician_installation = respx_mock.post(
-            url=f"/dhos/v1/clinician/{clinician_id}/installation"
+            url=f"/gdm/v1/clinician/{clinician_id}/installation"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -70,9 +70,9 @@ class TestTelemetryClient:
             clients, clinician_id, {}, clinician_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_telemetry_api,
+            client=clients.gdm_bff,
             method="post",
-            url=f"/dhos/v1/clinician/{clinician_id}/installation",
+            url=f"/gdm/v1/clinician/{clinician_id}/installation",
             json={},
             headers={"Authorization": f"Bearer {clinician_jwt}"},
         )

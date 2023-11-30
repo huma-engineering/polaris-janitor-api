@@ -8,9 +8,9 @@ from flask_batteries_included.helpers.timestamp import (
     parse_date_to_iso8601,
     parse_datetime_to_iso8601,
 )
-from she_data_generation.patient import nhs_number as sdg_nhs_number  # type: ignore
 
 from dhos_janitor_api.helpers import names
+from she_data_generation.patient import nhs_number as sdg_nhs_number  # type: ignore
 
 HOUSE_NAMES = [
     "The Amazons",
@@ -407,7 +407,7 @@ def generate_visit(
         "visit_date": parse_datetime_to_iso8601(visit_date),
         "summary": "Talked about diabetes",
         "location": location_uuid,
-        "clinician_uuid": clinician_uuid,
+        "clinician": clinician_uuid,
         "diagnoses": [],
         "created": parse_datetime_to_iso8601(visit_date),
         "created_by": clinician_uuid,
@@ -435,7 +435,7 @@ def generate_notes(
         notes.append(
             {
                 "content": random.choice(NOTES),
-                "clinician_uuid": clinician_uuid,
+                "clinician": clinician_uuid,
                 "created": parse_datetime_to_iso8601(note_date),
                 "modified": parse_datetime_to_iso8601(note_date),
             }

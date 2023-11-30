@@ -14,10 +14,10 @@ _cache: TTLCache = TTLCache(1, _config.STATIC_DATA_CACHE_TTL_SEC)
 @cached(cache=_cache)
 def get_trustomer_config(clients: ClientRepository) -> Dict:
     customer_code = _config.CUSTOMER_CODE.lower()
-    url = f"/dhos/v1/trustomer/{_config.CUSTOMER_CODE.lower()}"
+    url = f"/gdm/v1/trustomer/{_config.CUSTOMER_CODE.lower()}"
     logger.info("Fetching trustomer config from %s", url)
     response = make_request(
-        client=clients.dhos_trustomer_api,
+        client=clients.gdm_bff,
         method="get",
         url=url,
         headers={

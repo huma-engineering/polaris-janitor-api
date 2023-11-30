@@ -8,9 +8,9 @@ def get_clinicians_at_location(
     clients: ClientRepository, location_uuid: str, system_jwt: str
 ) -> List[Dict]:
     response = make_request(
-        client=clients.dhos_users_api,
+        client=clients.gdm_bff,
         method="get",
-        url=f"/dhos/v1/location/{location_uuid}/clinician",
+        url=f"/gdm/v1/location/{location_uuid}/clinician",
         headers={"Authorization": f"Bearer {system_jwt}"},
     )
     return response.json()
@@ -20,9 +20,9 @@ def get_clinicians(
     clients: ClientRepository, product_name: str, system_jwt: str
 ) -> List[Dict]:
     response = make_request(
-        client=clients.dhos_users_api,
+        client=clients.gdm_bff,
         method="get",
-        url="/dhos/v2/clinicians",
+        url="/gdm/v2/clinicians",
         headers={"Authorization": f"Bearer {system_jwt}"},
         params={"product_name": product_name},
     )
@@ -34,9 +34,9 @@ def create_clinician(
     clients: ClientRepository, clinician_details: Dict, system_jwt: str
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_users_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/clinician",
+        url="/gdm/v1/clinician",
         params={"send_welcome_email": False},
         json=clinician_details,
         headers={"Authorization": f"Bearer {system_jwt}"},
@@ -51,9 +51,9 @@ def update_clinician(
     system_jwt: str,
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_users_api,
+        client=clients.gdm_bff,
         method="patch",
-        url="/dhos/v1/clinician",
+        url="/gdm/v1/clinician",
         params={"email": clinician_email},
         json=clinician_details,
         headers={"Authorization": f"Bearer {system_jwt}"},

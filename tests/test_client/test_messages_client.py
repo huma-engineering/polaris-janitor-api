@@ -11,7 +11,7 @@ from dhos_janitor_api.blueprint_api.client import ClientRepository, messages_cli
 
 
 @pytest.mark.usefixtures("mock_clinician_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_MESSAGES_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestMessagesClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -25,7 +25,7 @@ class TestMessagesClient:
         clinician_jwt: str,
     ) -> None:
 
-        mock_create_message = respx_mock.post(url="/dhos/v1/message").mock(
+        mock_create_message = respx_mock.post(url="/gdm/v1/internal/message").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={},
@@ -34,9 +34,9 @@ class TestMessagesClient:
 
         actual = messages_client.create_message(clients, {}, clinician_jwt, {})
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_messages_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/message",
+            url="/gdm/v1/internal/message",
             json={},
             headers={"Authorization": f"Bearer {clinician_jwt}"},
         )

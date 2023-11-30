@@ -8,9 +8,9 @@ def create_question_type(
     clients: ClientRepository, question_type: Dict, system_jwt: str
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_questions_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/question_type",
+        url="/gdm/v1/internal/question_type",
         json=question_type,
         headers={"Authorization": f"Bearer {system_jwt}"},
     )
@@ -21,9 +21,9 @@ def create_question_option_type(
     clients: ClientRepository, question_option_type: Dict, system_jwt: str
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_questions_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/question_option_type",
+        url="/gdm/v1/internal/question_option_type",
         json=question_option_type,
         headers={"Authorization": f"Bearer {system_jwt}"},
     )
@@ -32,9 +32,9 @@ def create_question_option_type(
 
 def create_question(clients: ClientRepository, question: Dict, system_jwt: str) -> Dict:
     response = make_request(
-        client=clients.dhos_questions_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/question",
+        url="/gdm/v1/internal/question",
         json=question,
         headers={"Authorization": f"Bearer {system_jwt}"},
     )

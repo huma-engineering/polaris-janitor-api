@@ -11,7 +11,7 @@ from dhos_janitor_api.blueprint_api.client import ClientRepository, medication_c
 
 
 @pytest.mark.usefixtures("mock_system_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_MEDICATIONS_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestMedicationClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -23,7 +23,7 @@ class TestMedicationClient:
         respx_mock: MockRouter,
         spy_make_request: Mock,
     ) -> None:
-        mock_get_medications = respx_mock.get(url="/dhos/v1/medication").mock(
+        mock_get_medications = respx_mock.get(url="/gdm/v1/medication").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json=[
@@ -39,9 +39,9 @@ class TestMedicationClient:
             clients=clients, medication_tag="gdm-uk-default"
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_medications_api,
+            client=clients.gdm_bff,
             method="get",
-            url="/dhos/v1/medication",
+            url="/gdm/v1/medication",
             headers={
                 "Authorization": "secret",
                 "X-Trustomer": "test",

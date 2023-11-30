@@ -12,7 +12,7 @@ from dhos_janitor_api.blueprint_api.client import locations_client
 
 
 @pytest.mark.usefixtures("mock_system_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_LOCATIONS_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestLocationsClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -25,7 +25,9 @@ class TestLocationsClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_get_all_locations = respx_mock.get(url="/dhos/v1/location/search").mock(
+        mock_get_all_locations = respx_mock.get(
+            url="/gdm/v1/internal/location/search"
+        ).mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={},
@@ -36,9 +38,9 @@ class TestLocationsClient:
             clients, ["GDM", "DBM", "SEND"], system_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_locations_api,
+            client=clients.gdm_bff,
             method="get",
-            url="/dhos/v1/location/search",
+            url="/gdm/v1/internal/location/search",
             params={"product_name": ["GDM", "DBM", "SEND"], "compact": True},
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
@@ -53,7 +55,7 @@ class TestLocationsClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_create_location = respx_mock.post(url="/dhos/v1/location").mock(
+        mock_create_location = respx_mock.post(url="/gdm/v1/location").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={},
@@ -62,9 +64,9 @@ class TestLocationsClient:
 
         actual = locations_client.create_location(clients, {}, system_jwt)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_locations_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/location",
+            url="/gdm/v1/location",
             headers={"Authorization": f"Bearer {system_jwt}"},
             json={},
         )

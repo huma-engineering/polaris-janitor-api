@@ -15,9 +15,9 @@ def get_medications(
     clients: ClientRepository, medication_tag: Optional[str]
 ) -> List[Dict]:
     response = make_request(
-        client=clients.dhos_medications_api,
+        client=clients.gdm_bff,
         method="get",
-        url="/dhos/v1/medication",
+        url="/gdm/v1/medication",
         headers={
             "Authorization": _config.POLARIS_API_KEY,
             "X-Trustomer": _config.CUSTOMER_CODE.lower(),

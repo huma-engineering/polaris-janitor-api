@@ -12,7 +12,7 @@ from dhos_janitor_api.blueprint_api.client import activation_auth_client
 
 
 @pytest.mark.usefixtures("mock_system_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_ACTIVATION_AUTH_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestActivationAuthClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -27,7 +27,7 @@ class TestActivationAuthClient:
         spy_make_request: Mock,
     ) -> None:
         mock_create_activation_post = respx_mock.post(
-            url=f"/dhos/v1/patient/{patient_id}/activation"
+            url=f"/gdm/v1/internal/patient/{patient_id}/activation"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -39,9 +39,9 @@ class TestActivationAuthClient:
             clients, patient_id, system_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_activation_auth_api,
+            client=clients.gdm_bff,
             method="post",
-            url=f"/dhos/v1/patient/{patient_id}/activation",
+            url=f"/gdm/v1/internal/patient/{patient_id}/activation",
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
 
@@ -57,7 +57,7 @@ class TestActivationAuthClient:
         device_id: str,
     ) -> None:
         mock_create_activation_post = respx_mock.post(
-            url=f"/dhos/v1/device/{device_id}/activation"
+            url=f"/gdm/v1/internal/device/{device_id}/activation"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -68,9 +68,9 @@ class TestActivationAuthClient:
             clients, device_id, system_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_activation_auth_api,
+            client=clients.gdm_bff,
             method="post",
-            url=f"/dhos/v1/device/{device_id}/activation",
+            url=f"/gdm/v1/internal/device/{device_id}/activation",
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
 
@@ -86,7 +86,7 @@ class TestActivationAuthClient:
         device_id: str,
         location_id: str,
     ) -> None:
-        mock_create_device = respx_mock.post(url="/dhos/v1/device").mock(
+        mock_create_device = respx_mock.post(url="/gdm/v1/internal/device").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={},
@@ -97,9 +97,9 @@ class TestActivationAuthClient:
             clients, device_id, location_id, system_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_activation_auth_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/device",
+            url="/gdm/v1/internal/device",
             json={
                 "uuid": device_id,
                 "location_id": location_id,
@@ -122,7 +122,7 @@ class TestActivationAuthClient:
         otp = "321"
 
         mock_create_activation = respx_mock.post(
-            url=f"/dhos/v1/activation/{activation_code}"
+            url=f"/gdm/v1/activation/{activation_code}"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -132,9 +132,9 @@ class TestActivationAuthClient:
 
         actual = activation_auth_client.create_activation(clients, activation_code, otp)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_activation_auth_api,
+            client=clients.gdm_bff,
             method="post",
-            url=f"/dhos/v1/activation/{activation_code}",
+            url=f"/gdm/v1/activation/{activation_code}",
             json={"otp": otp},
         )
 
@@ -152,7 +152,7 @@ class TestActivationAuthClient:
         authorisation_code = "123"
 
         mock_get_patient_jwt = respx_mock.get(
-            url=f"/dhos/v1/patient/{patient_id}/jwt"
+            url=f"/gdm/v1/patient/{patient_id}/jwt"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -164,9 +164,9 @@ class TestActivationAuthClient:
             clients, patient_id, authorisation_code
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_activation_auth_api,
+            client=clients.gdm_bff,
             method="get",
-            url=f"/dhos/v1/patient/{patient_id}/jwt",
+            url=f"/gdm/v1/patient/{patient_id}/jwt",
             headers={"x-authorisation-code": authorisation_code},
         )
 

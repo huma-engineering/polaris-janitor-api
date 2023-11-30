@@ -10,7 +10,7 @@ from respx import MockRouter
 from dhos_janitor_api.blueprint_api.client import ClientRepository, trustomer_client
 
 
-@pytest.mark.respx(base_url=os.getenv("DHOS_TRUSTOMER_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestTrustomerClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -20,14 +20,14 @@ class TestTrustomerClient:
         self, clients: ClientRepository, respx_mock: MockRouter, spy_make_request: Mock
     ) -> None:
         config = {"some": "config"}
-        mocked_route = respx_mock.get("/dhos/v1/trustomer/test").mock(
+        mocked_route = respx_mock.get("/gdm/v1/trustomer/test").mock(
             return_value=httpx.Response(status_code=200, json=config)
         )
         trustomer_config = trustomer_client.get_trustomer_config(clients=clients)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_trustomer_api,
+            client=clients.gdm_bff,
             method="get",
-            url="/dhos/v1/trustomer/test",
+            url="/gdm/v1/trustomer/test",
             headers={
                 "Authorization": "secret",
                 "X-Trustomer": "test",
@@ -41,7 +41,7 @@ class TestTrustomerClient:
         self, clients: ClientRepository, respx_mock: MockRouter, spy_make_request: Mock
     ) -> None:
         config = {"some": "config"}
-        mocked_route = respx_mock.get("/dhos/v1/trustomer/test").mock(
+        mocked_route = respx_mock.get("/gdm/v1/trustomer/test").mock(
             return_value=httpx.Response(status_code=200, json=config)
         )
         trustomer_config = trustomer_client.get_trustomer_config(clients=clients)
@@ -62,7 +62,7 @@ class TestTrustomerClient:
         spy_make_request: Mock,
     ) -> None:
         config = {"some": "config"}
-        mocked_route = respx_mock.get("/dhos/v1/trustomer/test").mock(
+        mocked_route = respx_mock.get("/gdm/v1/trustomer/test").mock(
             return_value=httpx.Response(status_code=200, json=config)
         )
         trustomer_config = trustomer_client.get_trustomer_config(clients=clients)

@@ -27,7 +27,6 @@ class TestResetController:
             {},
             {"targets": ["dhos-notareal-api"]},
             {"targets": ["dhos-services-api", "dhos-locations-api"]},
-            {"targets": ["dhos-fuego-api"]},
         ),
     )
     @pytest.mark.parametrize("status_code", (200, 404))
