@@ -5,7 +5,6 @@ security:
     ignore-vulnerabilities: # Here you can list multiple specific vulnerabilities you want to ignore
         51457: # vulnerability ID
             reason: There is no fix for the vulnerability yet
-            expires: '2023-03-21'
         51668:
             reason: There is no stable version for sqlalchemy yet
             expires: '2023-03-21'

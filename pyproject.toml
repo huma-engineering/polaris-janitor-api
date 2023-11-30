@@ -10,12 +10,15 @@ repository = "https://github.com/draysontechnologies/dhos-janitor-api"
 python = "^3.9,<3.10"
 auth0-api-client = "1.*"
 cachetools = "5.*"
+connexion = "2.13.*"
 draymed = "2.*"
 faker = "4.*"
+flask = "2.2.*"
 flask-batteries-included = {version = "3.*", extras = ["apispec"]}
 httpx = "0.*"
 python-jose = "3.*"
 she-logging = "1.*"
+urllib3 = "1.26.*"
 
 [tool.poetry.dev-dependencies]
 bandit = "*"
