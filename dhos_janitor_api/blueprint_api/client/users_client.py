@@ -22,7 +22,7 @@ def get_clinicians(
     response = make_request(
         client=clients.gdm_bff,
         method="get",
-        url="/gdm/v2/clinicians",
+        url="/gdm/v2/internal/clinicians",
         headers={"Authorization": f"Bearer {system_jwt}"},
         params={"product_name": product_name},
     )
@@ -53,7 +53,7 @@ def update_clinician(
     response = make_request(
         client=clients.gdm_bff,
         method="patch",
-        url="/gdm/v1/clinician",
+        url="/gdm/v1/internal/clinician",
         params={"email": clinician_email},
         json=clinician_details,
         headers={"Authorization": f"Bearer {system_jwt}"},
