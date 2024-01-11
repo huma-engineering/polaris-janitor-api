@@ -29,6 +29,7 @@ from dhos_janitor_api.blueprint_api.client import (
     trustomer_client,
     users_client,
 )
+from dhos_janitor_api.blueprint_api.client.common import make_request
 from dhos_janitor_api.blueprint_api.controller import (
     auth_controller,
     generator_controller,
@@ -119,17 +120,16 @@ def reset_microservices(
         logger.debug("No microservices specified, defaulting to reset all")
 
     response_targets = {}
-    trustomer_config: Dict = trustomer_client.get_trustomer_config(clients=clients)
+    system_jwt = auth_controller.get_system_jwt()
+    trustomer_config: Dict = trustomer_client.get_trustomer_config(
+        clients=clients, system_jwt=system_jwt
+    )
     targets = tuple(
         resettable_targets(targets=requested_targets, trustomer_config=trustomer_config)
     )
 
-    for drop_target in targets:
-        logger.info("Dropping target %s", drop_target)
-        response_targets[drop_target.replace("_", "-")] = drop_service(
-            clients=clients,
-            target=drop_target,
-        )
+    logger.info("Dropping data for gdm-v2-bff")
+    drop_data(clients)
 
     for reset_target in targets:
         logger.info("Resetting target %s", reset_target)
@@ -143,25 +143,25 @@ def reset_microservices(
     return response_targets
 
 
-def drop_service(clients: ClientRepository, target: str) -> Dict:
-    logger.debug("Dropping data for target %s", target)
-    client: httpx.Client = getattr(clients, target)
+def drop_data(clients: ClientRepository) -> Dict:
+    logger.debug("Dropping data for gdm-v2-bff")
     try:
-        target_response = client.post(
-            "/drop_data",
-            headers={"Authorization": f"Bearer {auth_controller.get_system_jwt()}"},
-            timeout=30,
+        response = make_request(
+            client=clients.gdm_bff,
+            method="post",
+            url=f"/gdm/v2/internal/drop_data",
+            headers={"Authorization": f"Bearer {auth_controller.get_system_jwt()}"}
         )
-        target_response.raise_for_status()
+        response.raise_for_status()
     except httpx.HTTPStatusError as e:
-        logger.debug("Failed to drop data in target %s", target)
+        logger.debug("Failed to drop data in gdm-v2-bff")
         raise ServiceUnavailableException(e)
     except Exception as e:
-        logger.debug("Exception dropping data in target %s", target)
+        logger.debug("Exception dropping data in gdm-v2-bff")
         raise ServiceUnavailableException(e)
-    catch_and_log_deprecated_route(target_response)
-    target_response_json = target_response.json()
-    logger.debug("Dropped data for target %s", target)
+    catch_and_log_deprecated_route(response)
+    target_response_json = response.json()
+    logger.debug("Dropped data for gdm-v2-bff")
     return target_response_json
 
 

@@ -33,20 +33,16 @@ class TestMedicationClient:
         )
 
         medication_client.get_medications(
-            clients=clients, medication_tag="gdm-uk-default"
+            clients=clients, system_jwt="secret", medication_tag="gdm-uk-default"
         )
         actual = medication_client.get_medications(
-            clients=clients, medication_tag="gdm-uk-default"
+            clients=clients, system_jwt="secret", medication_tag="gdm-uk-default"
         )
         spy_make_request.assert_called_once_with(
             client=clients.gdm_bff,
             method="get",
             url="/gdm/v1/medication",
-            headers={
-                "Authorization": "secret",
-                "X-Trustomer": "test",
-                "X-Product": "gdm",
-            },
+            headers={"Authorization": "Bearer secret"},
             params={"tag": "gdm-uk-default"},
         )
 
