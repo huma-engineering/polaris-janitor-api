@@ -119,7 +119,7 @@ def reset_microservices(
     if not requested_targets:
         logger.debug("No microservices specified, defaulting to reset all")
 
-    response_targets = {}
+    response_targets: Dict = {}
     system_jwt = auth_controller.get_system_jwt()
     trustomer_config: Dict = trustomer_client.get_trustomer_config(
         clients=clients, system_jwt=system_jwt
@@ -150,7 +150,7 @@ def drop_data(clients: ClientRepository) -> Dict:
             client=clients.gdm_bff,
             method="post",
             url=f"/gdm/v2/internal/drop_data",
-            headers={"Authorization": f"Bearer {auth_controller.get_system_jwt()}"}
+            headers={"Authorization": f"Bearer {auth_controller.get_system_jwt()}"},
         )
         response.raise_for_status()
     except httpx.HTTPStatusError as e:

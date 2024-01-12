@@ -23,7 +23,9 @@ class TestTrustomerClient:
         mocked_route = respx_mock.get("/gdm/v1/trustomer/test").mock(
             return_value=httpx.Response(status_code=200, json=config)
         )
-        trustomer_config = trustomer_client.get_trustomer_config(clients=clients, system_jwt="secret")
+        trustomer_config = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt="secret"
+        )
         spy_make_request.assert_called_once_with(
             client=clients.gdm_bff,
             method="get",
@@ -40,12 +42,16 @@ class TestTrustomerClient:
         mocked_route = respx_mock.get("/gdm/v1/trustomer/test").mock(
             return_value=httpx.Response(status_code=200, json=config)
         )
-        trustomer_config = trustomer_client.get_trustomer_config(clients=clients, system_jwt="secret")
+        trustomer_config = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt="secret"
+        )
         spy_make_request.assert_called_once()
         assert mocked_route.call_count == 1
         assert trustomer_config == config
 
-        trustomer_config = trustomer_client.get_trustomer_config(clients=clients, system_jwt="secret")
+        trustomer_config = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt="secret"
+        )
         spy_make_request.assert_called_once()
         assert mocked_route.call_count == 1
         assert trustomer_config == config
@@ -61,7 +67,9 @@ class TestTrustomerClient:
         mocked_route = respx_mock.get("/gdm/v1/trustomer/test").mock(
             return_value=httpx.Response(status_code=200, json=config)
         )
-        trustomer_config = trustomer_client.get_trustomer_config(clients=clients, system_jwt="secret")
+        trustomer_config = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt="secret"
+        )
         assert spy_make_request.call_count == 1
         assert mocked_route.call_count == 1
         assert trustomer_config == config
@@ -69,7 +77,9 @@ class TestTrustomerClient:
         # unfortunately `freezegun` doesn't work here as TTLCache's
         #   time.monotonic is instantiated before freezegun's freeze.
         trustomer_client._cache.clear()
-        trustomer_config = trustomer_client.get_trustomer_config(clients=clients, system_jwt="secret")
+        trustomer_config = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt="secret"
+        )
 
         assert spy_make_request.call_count == 2
         assert mocked_route.call_count == 2

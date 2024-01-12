@@ -55,7 +55,7 @@ class TestServicesClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_get_clinicians = respx_mock.get(url="/gdm/v2/clinicians").mock(
+        mock_get_clinicians = respx_mock.get(url="/gdm/v2/internal/clinicians").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={"results": [{}], "total": 1},
@@ -66,7 +66,7 @@ class TestServicesClient:
         spy_make_request.assert_called_once_with(
             client=clients.gdm_bff,
             method="get",
-            url="/gdm/v2/clinicians",
+            url="/gdm/v2/internal/clinicians",
             params={"product_name": "GDM"},
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
@@ -105,7 +105,7 @@ class TestServicesClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_update_clinician = respx_mock.patch(url="/gdm/v1/clinician").mock(
+        mock_update_clinician = respx_mock.patch(url="/gdm/v1/internal/clinician").mock(
             return_value=httpx.Response(status_code=200, json={})
         )
 
@@ -115,7 +115,7 @@ class TestServicesClient:
         spy_make_request.assert_called_once_with(
             client=clients.gdm_bff,
             method="patch",
-            url="/gdm/v1/clinician",
+            url="/gdm/v1/internal/clinician",
             params={"email": "gregory@house.doctor"},
             json={},
             headers={"Authorization": f"Bearer {system_jwt}"},

@@ -54,7 +54,7 @@ class TestResetController:
         mock_populate_service = mocker.patch.object(
             reset_controller, "populate_service"
         )
-        mock_drop = respx_mock.post("/drop_data").mock(
+        mock_drop = respx_mock.post("/gdm/v2/internal/drop_data").mock(
             return_value=httpx.Response(status_code=status_code, json={})
         )
         mock_trustomer_config = mocker.patch.object(
