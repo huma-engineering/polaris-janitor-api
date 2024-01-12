@@ -6,6 +6,10 @@ env:
   REGISTRY: humagdmacr.azurecr.io
   ACR_USERNAME: humagdmacr
 
+permissions:
+  contents: read
+  packages: read
+
 jobs:
   test:
     name: Unit testing
