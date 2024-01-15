@@ -54,7 +54,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.triggering_actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.PAT }}
       - name: Run the integration test script
         run: ./run_integration_tests.sh
 
