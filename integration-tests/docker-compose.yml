@@ -340,6 +340,7 @@ services:
   dhos-rules-engine:
     container_name: "dhos-rules-engine"
     image: ghcr.io/huma-engineering/dhos/dhos-rules-engine:dev
+    command: "python -m dhos_rules_api"
 
   postgres-db:
     container_name: "postgres-db"
