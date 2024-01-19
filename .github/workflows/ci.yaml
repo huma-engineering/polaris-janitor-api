@@ -61,7 +61,7 @@ jobs:
   build_and_push:
     name: Build and push
     needs: [test,integration_tests]
-    if: ${{ github.ref == 'refs/heads/develop' }}
+    if: ${{ github.ref == 'refs/heads/GDMS-95-adjust-janitor-for-gdm-v2' }}
     runs-on: ubuntu-latest
     env:
       ACR_REPO_BASE: dhos
