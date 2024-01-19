@@ -305,6 +305,8 @@ services:
     depends_on:
       "postgres-db":
         condition: service_healthy
+      "dhos-rules-engine":
+        condition: service_started
 
   redis:
     container_name: redis
