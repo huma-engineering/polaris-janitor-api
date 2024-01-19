@@ -12,7 +12,7 @@ from dhos_janitor_api.blueprint_api.client import users_client
 
 
 @pytest.mark.usefixtures("mock_system_jwt", "mock_clinician_jwt")
-@pytest.mark.respx(base_url=os.getenv("DHOS_USERS_API"))
+@pytest.mark.respx(base_url=os.getenv("GDM_BFF"))
 class TestServicesClient:
     @pytest.fixture
     def spy_make_request(self, mocker: MockFixture) -> Mock:
@@ -27,7 +27,7 @@ class TestServicesClient:
     ) -> None:
         location_id = "123"
         mock_get_clinicians_at_location = respx_mock.get(
-            url=f"/dhos/v1/location/{location_id}/clinician"
+            url=f"/gdm/v1/location/{location_id}/clinician"
         ).mock(
             return_value=httpx.Response(
                 status_code=200,
@@ -39,9 +39,9 @@ class TestServicesClient:
             clients, location_id, system_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_users_api,
+            client=clients.gdm_bff,
             method="get",
-            url=f"/dhos/v1/location/{location_id}/clinician",
+            url=f"/gdm/v1/location/{location_id}/clinician",
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
 
@@ -55,7 +55,7 @@ class TestServicesClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_get_clinicians = respx_mock.get(url="/dhos/v2/clinicians").mock(
+        mock_get_clinicians = respx_mock.get(url="/gdm/v2/internal/clinicians").mock(
             return_value=httpx.Response(
                 status_code=200,
                 json={"results": [{}], "total": 1},
@@ -64,9 +64,9 @@ class TestServicesClient:
 
         actual = users_client.get_clinicians(clients, "GDM", system_jwt)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_users_api,
+            client=clients.gdm_bff,
             method="get",
-            url="/dhos/v2/clinicians",
+            url="/gdm/v2/internal/clinicians",
             params={"product_name": "GDM"},
             headers={"Authorization": f"Bearer {system_jwt}"},
         )
@@ -81,15 +81,15 @@ class TestServicesClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_create_clinician = respx_mock.post(url="/dhos/v1/clinician").mock(
+        mock_create_clinician = respx_mock.post(url="/gdm/v1/clinician").mock(
             return_value=httpx.Response(status_code=200, json={})
         )
 
         actual = users_client.create_clinician(clients, {}, system_jwt)
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_users_api,
+            client=clients.gdm_bff,
             method="post",
-            url="/dhos/v1/clinician",
+            url="/gdm/v1/clinician",
             params={"send_welcome_email": False},
             json={},
             headers={"Authorization": f"Bearer {system_jwt}"},
@@ -105,7 +105,7 @@ class TestServicesClient:
         system_jwt: str,
         spy_make_request: Mock,
     ) -> None:
-        mock_update_clinician = respx_mock.patch(url="/dhos/v1/clinician").mock(
+        mock_update_clinician = respx_mock.patch(url="/gdm/v1/internal/clinician").mock(
             return_value=httpx.Response(status_code=200, json={})
         )
 
@@ -113,9 +113,9 @@ class TestServicesClient:
             clients, "gregory@house.doctor", {}, system_jwt
         )
         spy_make_request.assert_called_once_with(
-            client=clients.dhos_users_api,
+            client=clients.gdm_bff,
             method="patch",
-            url="/dhos/v1/clinician",
+            url="/gdm/v1/internal/clinician",
             params={"email": "gregory@house.doctor"},
             json={},
             headers={"Authorization": f"Bearer {system_jwt}"},

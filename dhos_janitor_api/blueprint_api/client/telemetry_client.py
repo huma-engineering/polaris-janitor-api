@@ -8,9 +8,9 @@ def create_patient_installation(
     clients: ClientRepository, patient_id: str, installation: Dict, patient_jwt: str
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_telemetry_api,
+        client=clients.gdm_bff,
         method="post",
-        url=f"/dhos/v1/patient/{patient_id}/installation",
+        url=f"/gdm/v1/patient/{patient_id}/installation",
         json=installation,
         headers={"Authorization": f"Bearer {patient_jwt}"},
     )
@@ -21,9 +21,9 @@ def create_clinician_installation(
     clients: ClientRepository, clinician_id: str, installation: Dict, clinician_jwt: str
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_telemetry_api,
+        client=clients.gdm_bff,
         method="post",
-        url=f"/dhos/v1/clinician/{clinician_id}/installation",
+        url=f"/gdm/v1/clinician/{clinician_id}/installation",
         json=installation,
         headers={"Authorization": f"Bearer {clinician_jwt}"},
     )

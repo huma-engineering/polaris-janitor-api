@@ -63,11 +63,13 @@ def generate_patient(
         start_date = conception_date + timedelta(weeks=random.randint(6, 20))
         patient_sex = "female"
 
-        gdm_medication_tags = trustomer_client.get_trustomer_config(clients=clients)[
-            "gdm_config"
-        ]["medication_tags"]
+        gdm_medication_tags = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt=system_jwt
+        )["gdm_config"]["medication_tags"]
         gdm_medications = medication_client.get_medications(
-            clients=clients, medication_tag=gdm_medication_tags[0]
+            clients=clients,
+            system_jwt=system_jwt,
+            medication_tag=gdm_medication_tags[0],
         )
 
         record = patient_data.generate_diabetes_record(
@@ -95,11 +97,13 @@ def generate_patient(
         start_date = conception_date + timedelta(weeks=random.randint(6, 20))
         patient_sex = random.choice(["female", "male"])
 
-        dbm_medication_tags = trustomer_client.get_trustomer_config(clients=clients)[
-            "gdm_config"
-        ]["medication_tags"]
+        dbm_medication_tags = trustomer_client.get_trustomer_config(
+            clients=clients, system_jwt=system_jwt
+        )["gdm_config"]["medication_tags"]
         dbm_medications = medication_client.get_medications(
-            clients=clients, medication_tag=dbm_medication_tags[0]
+            clients=clients,
+            system_jwt=system_jwt,
+            medication_tag=dbm_medication_tags[0],
         )
 
         record = patient_data.generate_diabetes_record(

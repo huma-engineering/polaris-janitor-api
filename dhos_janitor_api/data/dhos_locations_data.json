@@ -2955,6 +2955,7 @@
       ],
       "display_name": "Normal Unit",
       "location_type": "723231000000104",
+      "ods_code": "ORG01",
       "uuid": "static_organisation_uuid_O1"
     },
     {
@@ -2967,6 +2968,7 @@
       ],
       "display_name": "Special Unit",
       "location_type": "723231000000104",
+      "ods_code": "ORG02",
       "uuid": "static_organisation_uuid_O2"
     }
   ]

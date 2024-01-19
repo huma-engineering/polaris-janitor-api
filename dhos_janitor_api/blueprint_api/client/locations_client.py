@@ -15,9 +15,9 @@ def get_all_locations(
     if location_types:
         params["location_types"] = "|".join(location_types)
     response = make_request(
-        client=clients.dhos_locations_api,
+        client=clients.gdm_bff,
         method="get",
-        url="/dhos/v1/location/search",
+        url="/gdm/v1/internal/location/search",
         params=params,
         headers={"Authorization": f"Bearer {system_jwt}"},
     )
@@ -26,9 +26,9 @@ def get_all_locations(
 
 def create_location(clients: ClientRepository, location: Dict, system_jwt: str) -> Dict:
     response = make_request(
-        client=clients.dhos_locations_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/location",
+        url="/gdm/v1/location",
         json=location,
         headers={"Authorization": f"Bearer {system_jwt}"},
     )

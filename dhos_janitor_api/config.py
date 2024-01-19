@@ -10,12 +10,9 @@ class Configuration:
     env = Env()
     DHOS_ACTIVATION_AUTH_API: str = env.str("DHOS_ACTIVATION_AUTH_API")
     DHOS_AUDIT_API: str = env.str("DHOS_AUDIT_API")
-    DHOS_ENCOUNTERS_API: str = env.str("DHOS_ENCOUNTERS_API")
-    DHOS_FUEGO_API: str = env.str("DHOS_FUEGO_API")
     DHOS_LOCATIONS_API: str = env.str("DHOS_LOCATIONS_API")
     DHOS_MEDICATIONS_API: str = env.str("DHOS_MEDICATIONS_API")
     DHOS_MESSAGES_API: str = env.str("DHOS_MESSAGES_API")
-    DHOS_OBSERVATIONS_API: str = env.str("DHOS_OBSERVATIONS_API")
     DHOS_QUESTIONS_API: str = env.str("DHOS_QUESTIONS_API")
     DHOS_SERVICES_API: str = env.str("DHOS_SERVICES_API")
     DHOS_USERS_API: str = env.str("DHOS_USERS_API")
@@ -25,7 +22,6 @@ class Configuration:
     GDM_ARTICLES_API: str = env.str("GDM_ARTICLES_API")
     GDM_BG_READINGS_API: str = env.str("GDM_BG_READINGS_API")
     GDM_BFF: str = env.str("GDM_BFF")
-    SEND_BFF: str = env.str("SEND_BFF")
 
     HS_KEY: str = env.str("HS_KEY")
     PROXY_URL: str = env.str("PROXY_URL").rstrip("/") + "/"
@@ -52,19 +48,15 @@ class Configuration:
         "dhos_services_api": "DHOS_SERVICES_API",
         "dhos_activation_auth_api": "DHOS_ACTIVATION_AUTH_API",
         "dhos_audit_api": "DHOS_AUDIT_API",
-        "dhos_encounters_api": "DHOS_ENCOUNTERS_API",
-        "dhos_fuego_api": "DHOS_FUEGO_API",
         "dhos_messages_api": "DHOS_MESSAGES_API",
         "dhos_questions_api": "DHOS_QUESTIONS_API",
         "dhos_telemetry_api": "DHOS_TELEMETRY_API",
         "gdm_bg_readings_api": "GDM_BG_READINGS_API",
-        "dhos_observations_api": "DHOS_OBSERVATIONS_API",
     }
 
     # Targets for API calls including those we don't want to reset.
     ALL_TARGETS = {
         "gdm_bff": "GDM_BFF",
-        "send_bff": "SEND_BFF",
         "dhos_medications_api": "DHOS_MEDICATIONS_API",
         "dhos_trustomer_api": "DHOS_TRUSTOMER_API",
         "dhos_url_api": "DHOS_URL_API",
@@ -91,12 +83,8 @@ def resettable_targets(
         unknown_targets = targets - Configuration.RESETTABLE_TARGETS.keys()
         if unknown_targets:
             raise ValueError(f"Unknown microservices '{','.join(unknown_targets)}'")
-        if not use_epr_integration and "dhos_fuego_api" in targets:
-            raise ValueError(f"EPR integration is disabled, can't reset dhos-fuego-api")
     else:
         targets = set(Configuration.RESETTABLE_TARGETS.keys())
-        if not use_epr_integration:
-            targets.remove("dhos_fuego_api")
 
     for target in Configuration.RESETTABLE_TARGETS:
         if target in targets:

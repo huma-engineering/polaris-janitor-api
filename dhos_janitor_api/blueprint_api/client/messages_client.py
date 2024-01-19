@@ -8,9 +8,9 @@ def create_message(
     clients: ClientRepository, message: Dict, jwt: str, headers: Dict[str, Any]
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_messages_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/message",
+        url="/gdm/v1/internal/message",
         json=message,
         headers={**headers, "Authorization": f"Bearer {jwt}"},
     )

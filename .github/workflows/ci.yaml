@@ -1,30 +1,90 @@
-name: CI - dhos-janitor-api
+name: CI
 
-on:
-  push:
+on: [workflow_dispatch, push, pull_request]
 
 env:
-  USERNAME: ${{ github.actor }}
-  REPO_BASE: ${{ github.repository_owner }}/dhos
-  OWNER: ${{ github.repository_owner }}
-  SERVICE: dhos-janitor-api
-  FOLDER: .
+  REGISTRY: humagdmacr.azurecr.io
+  ACR_USERNAME: humagdmacr
+
+permissions:
+  contents: read
+  packages: read
 
 jobs:
-  build_and_push:
-    name: Build and Push
+  test:
+    name: Unit testing
     runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
     steps:
       - uses: actions/checkout@v3
-      - uses: ./.github/actions/build-and-push-image-to-ghcr
+      - name: Install poetry
+        run: pipx install poetry
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          username: ${{ env.USERNAME }}
-          service: ${{ env.SERVICE }}
-          repo_base: ${{ env.REPO_BASE }}
-          folder: ${{ env.FOLDER }}
-          owner: ${{ env.OWNER }}
-          dispatch_token: ${{ secrets.DISPATCH_TOKEN }}
+          python-version: '3.9'
+      - name: Update pip, poetry and tox
+        run: |
+          poetry self update --no-ansi
+          pip install --upgrade pip tox
+      - name: Create coverage report dir
+        run: mkdir -p coverage-reports
+      - name: Cache python dependencies
+        uses: actions/cache@v3
+        with:
+          path: '**/.tox'
+          key: v1-poetry-deps-${{ hashFiles('**/poetry.lock', '**/tox.ini') }}
+          restore-keys: v1-poetry-deps-
+      - name: Run tox tests
+        run: tox -e py39
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v3
+        with:
+          name: code-coverage-report
+          path: coverage-reports/coverage.xml
+
+  integration_tests:
+    name: Integration testing
+    runs-on: ubuntu-latest
+    env:
+      SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_KEY_PRIVATE }}
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to the GitHub Packages
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.triggering_actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run the integration test script
+        run: ./run_integration_tests.sh
+
+  build_and_push:
+    name: Build and push
+    needs: [test,integration_tests]
+    if: ${{ github.ref == 'refs/heads/GDMS-95-adjust-janitor-for-gdm-v2' }}
+    runs-on: ubuntu-latest
+    env:
+      ACR_REPO_BASE: dhos
+    steps:
+      - uses: actions/checkout@v3
+      - name: Log in to the Azure Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ env.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.ACR_REPO_BASE }}/dhos-janitor-api
+          tags: |
+            type=raw,value=dev-huma-v2
+            type=sha
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v3
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

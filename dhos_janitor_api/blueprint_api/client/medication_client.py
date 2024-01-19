@@ -12,17 +12,13 @@ _cache: TTLCache = TTLCache(1, _config.STATIC_DATA_CACHE_TTL_SEC)
 
 @cached(cache=_cache)
 def get_medications(
-    clients: ClientRepository, medication_tag: Optional[str]
+    clients: ClientRepository, system_jwt: str, medication_tag: Optional[str]
 ) -> List[Dict]:
     response = make_request(
-        client=clients.dhos_medications_api,
+        client=clients.gdm_bff,
         method="get",
-        url="/dhos/v1/medication",
-        headers={
-            "Authorization": _config.POLARIS_API_KEY,
-            "X-Trustomer": _config.CUSTOMER_CODE.lower(),
-            "X-Product": "gdm",
-        },
+        url="/gdm/v1/medication",
+        headers={"Authorization": f"Bearer {system_jwt}"},
         params={"tag": medication_tag},
     )
     return [

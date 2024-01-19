@@ -10,13 +10,15 @@ repository = "https://github.com/draysontechnologies/dhos-janitor-api"
 python = "^3.9,<3.10"
 auth0-api-client = "1.*"
 cachetools = "5.*"
+connexion = "2.13.*"
 draymed = "2.*"
 faker = "4.*"
+flask = "2.2.*"
 flask-batteries-included = {version = "3.*", extras = ["apispec"]}
 httpx = "0.*"
 python-jose = "3.*"
-she-data-generation = {git = "git@github.com:huma-engineering/she-data-generation.git"}
 she-logging = "1.*"
+urllib3 = "1.26.*"
 
 [tool.poetry.dev-dependencies]
 bandit = "*"
@@ -33,6 +35,8 @@ pytest-mock = "*"
 respx = "0.*"
 safety = "*"
 tox = "*"
+draymed = "2.*"
+faker = "4.*"
 types-cachetools = "*"
 types-Flask = "*"
 types-mock = "*"
@@ -59,7 +63,7 @@ ignore_missing_imports = true
 
 [tool.isort]
 profile = "black"
-known_third_party = ["apispec", "apispec_webframeworks", "auth0_api_client", "behave", "cachetools", "click", "clients", "connexion", "draymed", "environs", "faker", "flask", "flask_batteries_included", "helpers", "httpx", "jose", "marshmallow", "mock", "pytest", "pytest_mock", "reporting", "reportportal_behave", "requests", "respx", "she_data_generation", "she_logging", "waitress", "yaml"]
+known_third_party = ["apispec", "apispec_webframeworks", "auth0_api_client", "behave", "cachetools", "click", "clients", "connexion", "draymed", "environs", "faker", "flask", "flask_batteries_included", "helpers", "httpx", "jose", "marshmallow", "mock", "pytest", "pytest_mock", "reporting", "reportportal_behave", "requests", "respx", "she_logging", "waitress", "yaml"]
 
 [tool.black]
 line-length = 88

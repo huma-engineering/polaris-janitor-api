@@ -74,7 +74,7 @@ def post_patient(context: Context, patient: Dict) -> str:
     generate_system_token(context)
 
     response = requests.post(
-        "http://dhos-services-api:5000/dhos/v1/patient",
+        "http://gdm-bff:5000/gdm/v1/internal/patient",
         params={"type": "GDM"},
         headers={"Authorization": f"Bearer {context.system_jwt}"},
         json=patient,
@@ -88,7 +88,7 @@ def get_patient(context: Context, patient_uuid: str) -> Dict:
     generate_superclinician_token(context)
 
     response = requests.get(
-        f"http://dhos-services-api:5000/dhos/v1/patient/{patient_uuid}",
+        f"http://gdm-bff:5000/gdm/v2/patient/{patient_uuid}",
         params={"type": "GDM"},
         headers={"Authorization": f"Bearer {context.superclinician_jwt}"},
         timeout=30,
@@ -101,7 +101,7 @@ def search_patients(context: Context, product: str) -> List[Dict]:
     generate_system_token(context)
 
     response = requests.get(
-        "http://dhos-services-api:5000/dhos/v1/patient/search",
+        "http://gdm-bff:5000/gdm/v1/internal/patient/search",
         params={"product_name": product, "active": True},  # type: ignore
         headers={"Authorization": f"Bearer {context.system_jwt}"},
         timeout=30,
@@ -139,7 +139,7 @@ def post_clinician(context: Context, clinician: Dict) -> dict:
     use_fixture(get_system_token, context)
 
     response = requests.post(
-        "http://dhos-users-api:5000/dhos/v1/clinician",
+        "http://gdm-bff:5000/gdm/v1/clinician",
         params={"send_welcome_email": False},
         headers={"Authorization": f"Bearer {context.system_jwt}"},
         json=clinician,

@@ -29,8 +29,8 @@ x-environment: &COMMON_ENVIRONMENT
   REDIS_HOST: localhost
   REDIS_PORT: 6379
   REDIS_PASSWORD: any
-  CUSTOMER_CODE: INTTESTS
-  LOG_LEVEL: INFO
+  CUSTOMER_CODE: TST
+  LOG_LEVEL: DEBUG
   LOG_FORMAT: COLOUR
 
   DEA_AUTH0_CLIENT_ID: something
@@ -62,214 +62,6 @@ x-environment: &COMMON_ENVIRONMENT
   ALLOW_DROP_DATA: "True"
   DHOS_URL_API_REGION_ID: R
   SERVER_TIMEZONE: Europe/London
-
-  MOCK_TRUSTOMER_CONFIG: |
-    {
-      "gdm_config": {
-        "alerts_system": "counts",
-        "blood_glucose_units": "mmol/L",
-        "blood_glucose_thresholds_mmoll": {
-          "BEFORE-BREAKFAST": {"high": 5.3, "low": 4.0},
-          "OTHER": {"high": 7.8, "low": 4.0},
-          "BEFORE-LUNCH": {"high": 6.0, "low": 4.0},
-          "BEFORE-DINNER": {"high": 6.0, "low": 4.0}
-        },
-        "graph_thresholds_mmoll": {"high": 7.8, "low": 4.0},
-        "medication_tags": ["gdm-uk-default"],
-        "use_syne_predictions": false,
-        "use_epr_integration": false
-      },
-      "send_config": {
-        "allow_take_obs_in_desktop": true,
-        "generate_oru_messages": true,
-        "job_titles": [
-          {
-            "title": "Allied Healthcare Professional",
-            "value": "allied_healthcare_professional"
-          },
-          {
-            "title": "Clerical Support Worker",
-            "value": "clerical_support_worker"
-          },
-          {
-            "title": "Clinical Support Worker",
-            "value": "clinical_support_worker"
-          },
-          {
-            "title": "Doctor",
-            "value": "doctor"
-          },
-          {
-            "title": "Nurse",
-            "value": "nurse"
-          },
-          {
-            "title": "Student",
-            "value": "student"
-          }
-        ],
-        "max_retrospective_obs_period_hours": 4,
-        "news2": {
-          "escalation_policy": {
-            "high_monitoring": "<p>Take obs at least every 30 mins<br/><br/><b>For Warwick</b><br/>Commence fluid balance chart<br/>Consider urinary catheter<br/>Use SBAR for any communication<br/>Registered nurse must immediately: <ul> <li>Inform Medical Team SPR level or above - To attend within 30 minutes</li> <li>Inform Critical Care Outreach bleep 3101</li> <li>Medical Team must document treatment escalation plan</li> </ul> <b>For Leamington, Stratford and Ellen Badger</b> <br/> Commence fluid balance chart <br/> Consider urinary catheter <br/> Use SBAR for any communication <br/> Inform nurse in charge <br/> Immediate call to Doctor <br/> Out of hours' follow local procedure <br/> Call 999 if transfer to acute hospital is required </p>",
-            "low_medium_monitoring": "<p>Take obs at least every 1 hour<br/><br/><b>For Warwick</b><br/>Commence fluid balance chart<br/>Consider urinary catheter<br/>Use SBAR for any communication<br/>Registered nurse must: <ul> <li>Contact Junior Doctor to review patient within 30 minutes</li> <li>Inform Critical Care Outreach bleep 3101</li> <li>Medical Team must document treatment escalation plan</li> </ul> <b>For Leamington, Stratford and Ellen Badger</b> <br/> Commence fluid balance chart <br/> Consider urinary catheter <br/> Use SBAR for any communication <br/> Inform nurse in charge <br/> Immediate call to Doctor <br/> Out of hours' follow local procedure <br/> Call 999 if transfer to acute hospital is required </p>",
-            "low_monitoring": "<p>Take obs at least every 4 hours<br/><br/>Inform registered nurse who must assess the patient<br/><br/>Registered nurse to decide if increased frequency of monitoring and/or escalation of clinical care is required</p>",
-            "medium_monitoring": "<p>Take obs at least every 1 hour<br/><br/><b>For Warwick</b><br/>Commence fluid balance chart<br/>Consider urinary catheter<br/>Use SBAR for any communication<br/>Registered nurse must: <ul> <li>Contact Junior Doctor to review patient within 30 minutes</li> <li>Inform Critical Care Outreach bleep 3101</li> <li>Medical Team must document treatment escalation plan</li> </ul> <b>For Leamington, Stratford and Ellen Badger</b> <br/> Commence fluid balance chart <br/> Consider urinary catheter <br/> Use SBAR for any communication <br/> Inform nurse in charge <br/> Immediate call to Doctor <br/> Out of hours' follow local procedure <br/> Call 999 if transfer to acute hospital is required </p>",
-            "routine_monitoring": "<p>Take obs at least every 12 hours<br/><br/>Continue routine NEWS monitoring with every set of observations</p>"
-          },
-          "high_severity_interval_hours": 0,
-          "low_medium_severity_interval_hours": 1,
-          "low_severity_interval_hours": 4,
-          "medium_severity_interval_hours": 1,
-          "zero_severity_interval_hours": 12
-        },
-        "nurse_concern": [
-          {
-            "code": "A",
-            "name": "Airway compromise",
-            "text": "Acute airway compromised"
-          },
-          {
-            "code": "B",
-            "name": "Bleeding/Melaena",
-            "text": "Blood loss / melaena"
-          },
-          {
-            "code": "C",
-            "name": "Pallor or Cyanosis",
-            "text": "Colour change in patient / extremity (pale, dusky, blue)"
-          },
-          {
-            "code": "D",
-            "name": "New Facial/limb weakness",
-            "text": "Sudden loss of movement, or weakness of face or limb"
-          },
-          {
-            "code": "E",
-            "name": "Diarrhoea/vomiting",
-            "text": "New onset of vomiting / diarrhoea"
-          },
-          {
-            "code": "G",
-            "name": "Unresolved Pain",
-            "text": "Unresolved or new onset of pain (undiagnosed)"
-          },
-          {
-            "code": "F",
-            "name": "Abnormal Electrolyte/BG",
-            "text": "Abnormal electrolyte or blood glucose level"
-          },
-          {
-            "code": "H",
-            "name": "Self Harm",
-            "text": "Self-harm episode or threatened"
-          },
-          {
-            "code": "J",
-            "name": "Shock (HR > BP)",
-            "text": "Heart rate > systolic BP"
-          },
-          {
-            "code": "I",
-            "name": "Infection?",
-            "text": "Possible infection \u2013 fill in sepsis chart"
-          },
-          {
-            "code": "K",
-            "name": "Concern not listed above",
-            "text": "Concern not listed above"
-          }
-        ],
-        "nurse_concerns": [
-          "Airway compromise",
-          "Bleeding/Melaena",
-          "Pallor or Cyanosis",
-          "New Facial/limb weakness",
-          "Diarrhoea/vomiting",
-          "Unresolved Pain",
-          "Abnormal Electrolyte/BG",
-          "Self Harm",
-          "Shock (HR > BP)",
-          "Infection?",
-          "Concern not listed above"
-        ],
-        "oxygen_masks": [
-          {
-            "code": "RA",
-            "id": "roomAir",
-            "name": "Room Air"
-          },
-          {
-            "code": "V{mask_percent}",
-            "id": "venturi",
-            "name": "Venturi"
-          },
-          {
-            "code": "H{mask_percent}",
-            "id": "humidified",
-            "name": "Humidified"
-          },
-          {
-            "code": "HIF{mask_percent}",
-            "id": "highFlow",
-            "name": "High Flow"
-          },
-          {
-            "code": "N",
-            "id": "nasal",
-            "name": "Nasal cann."
-          },
-          {
-            "code": "SM",
-            "id": "simple",
-            "name": "Simple"
-          },
-          {
-            "code": "RM",
-            "id": "resv",
-            "name": "Resv mask"
-          },
-          {
-            "code": "TM",
-            "id": "trach",
-            "name": "Trach."
-          },
-          {
-            "code": "CP",
-            "id": "cpap",
-            "name": "CPAP"
-          },
-          {
-            "code": "NIV",
-            "id": "niv",
-            "name": "NIV"
-          },
-          {
-            "code": "NM",
-            "id": "nebuliser",
-            "name": "Nebuliser"
-          }
-        ],
-        "post_discharge_display_time_hours": 1,
-        "send_desktop_timeout_minutes": 15,
-        "send_entry_timeout_minutes": 8,
-        "send_terms_version": 1,
-        "meows": {
-          "escalation_policy": {
-            "high_monitoring": "high",
-            "low_medium_monitoring": "lo_med",
-            "low_monitoring": "low",
-            "medium_monitoring": "med",
-            "routine_monitoring": "routine"
-          },
-          "high_severity_interval_hours": 0.5,
-          "low_medium_severity_interval_hours": 6,
-          "low_severity_interval_hours": 12,
-          "medium_severity_interval_hours": 0.5,
-          "zero_severity_interval_hours": 12
-        }
-      }
-    }
   MOCK_GDM_PATIENT_SCOPE: >-
     read:gdm_answer
     read:gdm_bg_reading
@@ -359,6 +151,68 @@ x-environment: &COMMON_ENVIRONMENT
     read:send_device
     read:send_location
 
+x-gdm-bff-environment: &GDM_BFF_ENVIRONMENT
+  <<: *COMMON_ENVIRONMENT
+  DATABASE_NAME: gdm-bff-db
+  DHOS_AGGREGATOR_API_HOST: doesntmatter
+  DHOS_FUEGO_API_HOST: http://dhos-fuego-api:5000
+  DHOS_RULES_ENGINE_URL: http://dhos-rules-engine:3000
+  SYNE_API_URL: doesntmatter
+  SYNE_API_KEY: doesntmatter
+  EXTERNAL_URL: http://external-url.com
+  SMS_DEFAULT_SENDER: GDm-Health
+  DHOS_URL_API_REGION_ID: R
+  DISABLE_CREATE_USER_IN_AUTH0: "True"
+  GDM_BCP_OUTPUT_DIR: gdm-bcp-output
+  DBM_BCP_OUTPUT_DIR: dbm-bcp-output
+  SEND_BCP_OUTPUT_DIR: send-bcp-output
+  SEND_DISCHARGE_OUTPUT_DIR: send-discharge-output
+  SEND_WARD_REPORT_OUTPUT_DIR: send-ward-report-output
+  SEND_TMP_OUTPUT_DIR: /tmp
+  SEND_BCP_RSYNC_DIR: send-bcp-rsync
+  GDM_ARTICLES_WWW: "https://gdm-bff:5000"
+  TWILIO_CALL_BACK_URL: "http://dummy-callback-url"
+  COUNTRY_CODE: GB
+  TWILIO_ACCOUNT_SID: test
+  TWILIO_AUTH_TOKEN: test
+  TWILIO_DISABLED: "true"
+  SMTP_HOST: fake-smtp
+  SMTP_AUTH_PASS: pass
+  SMTP_AUTH_USER: user
+  EMAIL_SENDER: "sender@domain.com"
+  DISABLE_EMAIL_SEND: "false"
+  SQLALCHEMY_POOL_SIZE: 10
+  CELERY_BROKER_URL: redis://redis:6379/0
+  CELERY_BACKEND_URL: redis://redis:6379/0
+  GDM_BASE_URL: http://gdm-bff:5000
+  DHOS_ACTIVATION_AUTH_API_HOST: http://dhos-activation-auth-api:5000
+  DHOS_LOCATIONS_API_HOST: http://dhos-locations-api:5000
+  DHOS_MEDICATIONS_API_HOST: http://wiremock:8080/dhos-medications
+  DHOS_MESSAGES_API_HOST: http://wiremock:8080/dhos-messages
+  DHOS_PDF_API_HOST: doesntmatter
+  DHOS_QUESTIONS_API_HOST: doesntmatter
+  DHOS_RULES_API_HOST: http://dhos-rules-api:5000
+  DHOS_SERVICES_API_HOST: http://dhos-services-api:5000
+  DHOS_SMS_API_HOST: doesntmatter
+  DHOS_URL_API_HOST: http://dhos-url-api:5000
+  DHOS_USERS_API_HOST: http://dhos-users-api:5000
+  DHOS_TELEMETRY_API_HOST: doesntmatter
+  DHOS_TRUSTOMER_API_HOST: http://wiremock:8080/dhos-trustomer
+  GDM_ARTICLES_API_HOST: doesntmatter
+  GDM_BG_READINGS_API_HOST: http://gdm-bg-readings-api:5000
+  TOKEN_URL: "http://localhost/token"
+  AUTH0_AUDIENCE: http://localhost/
+  AUTH0_CLIENT_ID: dummy
+  AUTH0_MGMT_CLIENT_ID: "doesnotmatter"
+  AUTH0_MGMT_CLIENT_SECRET: "shhh"
+  AUTH0_AUTHZ_CLIENT_ID: "doesnotmatter"
+  AUTH0_AUTHZ_CLIENT_SECRET: "shhh"
+  AUTH0_AUTHZ_WEBTASK_URL: "doesnotmatter"
+  NONCUSTOM_AUTH0_DOMAIN: "https://integration-tests"
+  AUTH0_CUSTOM_DOMAIN: "dev"
+  AUTH0_HS_KEY: "secret"
+  TRUSTOMER_CONFIG_MOUNT: "trustomer-config-dummy"
+
 volumes:
   app-volume:
 
@@ -384,25 +238,17 @@ services:
     command: >
       bash -c "behave --no-capture --no-logcapture ${BEHAVE_ARGS:-}"
     depends_on:
-      "send-bff":
-        condition: service_healthy
       "gdm-bff":
         condition: service_healthy
       "dhos-janitor-api":
         condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
       "wiremock":
-        condition: service_healthy
-      "dhos-hapi-fhir-api":
         condition: service_healthy
 
   dhos-janitor-api:
     container_name: "dhos-janitor-api"
     build:
       context: ../
-      ssh:
-        - ed=$DOCKER_SSH
     environment:
       <<: *COMMON_ENVIRONMENT
       EXTERNAL_URL: http://dhos-janitor-api:5000
@@ -442,333 +288,61 @@ services:
     command: >
       python -m dhos_janitor_api
     depends_on:
-      "dhos-services-api":
-        condition: service_healthy
-      "dhos-locations-api":
-        condition: service_healthy
-      "dhos-activation-auth-api":
-        condition: service_healthy
-      "dhos-observations-api":
-        condition: service_healthy
-      "gdm-bg-readings-api":
-        condition: service_healthy
-      "dhos-encounters-api":
-        condition: service_healthy
-      "dhos-fuego-api":
-        condition: service_healthy
-      "dhos-questions-api":
-        condition: service_healthy
-      "dhos-users-api":
-        condition: service_healthy
-      "send-bff":
-        condition: service_healthy
       "gdm-bff":
         condition: service_healthy
+      "celery-worker":
+        condition: service_healthy
 
-  send-bff:
-    container_name: "send-bff"
-    image: "humagdmacr.azurecr.io/send/send-bff:dev"
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DHOS_ENCOUNTERS_API_HOST: http://dhos-encounters-api:5000
-      DHOS_OBSERVATIONS_API_HOST: http://dhos-observations-api:5000
-      DHOS_PDF_API_HOST: http://dhos-pdf-api:5000
-      DHOS_RULES_API_HOST: http://dhos-rules-api:5000
-      DHOS_SERVICES_API_HOST: http://dhos-services-api:5000
-      DHOS_TRUSTOMER_API_HOST: http://dhos-trustomer-api:5000
-      DHOS_CONNECTOR_API_HOST: http://dhos-connector-api:5000
-      DHOS_ACTIVATION_API_HOST: http://dhos-activation-api:5000
-      DHOS_URL_API_HOST: http://dhos-url-api:5000
-      DHOS_USERS_API_HOST: http://dhos-users-api:5000
-      DHOS_ACTIVATION_AUTH_API_HOST: http://dhos-activation-auth-api:5000
-    command: python -m send_bff
-    <<: *FLASK_HEALTHCHECK
-    depends_on:
-      "dhos-activation-auth-api":
-        condition: service_healthy
-      "dhos-observations-api":
-        condition: service_healthy
-      "dhos-encounters-api":
-        condition: service_healthy
-      "dhos-services-api":
-        condition: service_healthy
-      "dhos-locations-api":
-        condition: service_healthy
-      "dhos-users-api":
-        condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
-  
   gdm-bff:
     container_name: "gdm-bff"
-    image: "humagdmacr.azurecr.io/gdm/gdm-bff:dev"
+    image: ghcr.io/huma-engineering/gdm-v2-bff:main-d2f4f2cb
     environment:
-      <<: *COMMON_ENVIRONMENT
-      DHOS_ACTIVATION_AUTH_API_HOST: http://dhos-activation-auth-api:5000
-      DHOS_AGGREGATOR_API_HOST: doesntmatter
-      DHOS_FUEGO_API_HOST: http://dhos-fuego-api:5000
-      DHOS_LOCATIONS_API_HOST: http://dhos-locations-api:5000
-      DHOS_MEDICATIONS_API_HOST: http://wiremock:8080/dhos-medications
-      DHOS_MESSAGES_API_HOST: http://wiremock:8080/dhos-messages
-      DHOS_PDF_API_HOST: doesntmatter
-      DHOS_QUESTIONS_API_HOST: doesntmatter
-      DHOS_RULES_API_HOST: http://dhos-rules-api:5000
-      DHOS_SERVICES_API_HOST: http://dhos-services-api:5000
-      DHOS_SMS_API_HOST: doesntmatter
-      DHOS_URL_API_HOST: http://dhos-url-api:5000
-      DHOS_USERS_API_HOST: http://dhos-users-api:5000
-      DHOS_TELEMETRY_API_HOST: doesntmatter
-      DHOS_TRUSTOMER_API_HOST: http://wiremock:8080/dhos-trustomer
-      GDM_ARTICLES_API_HOST: doesntmatter
-      GDM_BG_READINGS_API_HOST: http://gdm-bg-readings-api:5000
-      SYNE_API_URL: doesntmatter
-      SYNE_API_KEY: doesntmatter
-      EXTERNAL_URL: http://external-url.com
-      SMS_DEFAULT_SENDER: GDm-Health
+      <<: *GDM_BFF_ENVIRONMENT
     <<: *FLASK_HEALTHCHECK
-    command: python -m gdm_bff
+    command: >
+      bash -c "flask db upgrade
+      && python -m gdm_bff"
     depends_on:
-      "gdm-bg-readings-api":
+      "postgres-db":
         condition: service_healthy
-      "dhos-rules-api":
-        condition: service_healthy
-      "dhos-services-api":
-        condition: service_healthy
-      "dhos-locations-api":
-        condition: service_healthy
-      "dhos-users-api":
-        condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
+      "dhos-rules-engine":
+        condition: service_started
 
-  dhos-async-adapter:
-    container_name: "dhos-async-adapter"
-    image: "humagdmacr.azurecr.io/dhos/dhos-async-adapter:dev"
+  redis:
+    container_name: redis
+    image: docker.io/redis:7.2-alpine
+    healthcheck:
+      test: [ "CMD", "redis-cli", "--raw", "incr", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    ports:
+      - "6379"
+
+  celery-worker:
+    container_name: celery-worker
+    image: ghcr.io/huma-engineering/gdm-v2-bff:main-d2f4f2cb
+    environment:
+      <<: *GDM_BFF_ENVIRONMENT
+    command: celery -A gdm_bff.autoapp worker --loglevel=debug
     volumes:
-      - app-volume:/app
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      PROXY_URL: http://localhost
-      SMS_DEFAULT_SENDER: GDm-Health
-    command: python -m dhos_async_adapter
+      - ../bff/trustomer-config-dummy:/trustomer-config
+    healthcheck:
+      test: [ "CMD-SHELL", "celery inspect ping --destination celery@$$HOSTNAME" ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
     depends_on:
-      "rabbitmq":
+      "gdm-bff":
         condition: service_healthy
-
-  dhos-services-api:
-    container_name: "dhos-services-api"
-    image: "humagdmacr.azurecr.io/dhos/dhos-services-api:dev"
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      EXTERNAL_URL: http://dhos-services-api:5000
-      DISABLE_CREATE_USER_IN_AUTH0: "True"
-      SMTP_HOST: dummy
-      SMTP_AUTH_PASS: dummy
-      SMTP_AUTH_USER: dummy
-      EMAIL_SENDER: dummy
-      GDM_SMS_SENDER: dummy
-      GDM_LINK_MSG: http://dummy
-      TOKEN_URL: "https://dummy/oauth/token"
-      AUTH0_MGMT_CLIENT_ID: "dummy"
-      AUTH0_MGMT_CLIENT_SECRET: "dummy"
-      AUTH0_AUTHZ_CLIENT_ID: "doesnotmatter"
-      AUTH0_AUTHZ_CLIENT_SECRET: "dummy"
-      AUTH0_AUTHZ_WEBTASK_URL: "dummy"
-      NONCUSTOM_AUTH0_DOMAIN: "https://dummy"
-      AUTH0_CUSTOM_DOMAIN: "dev"
-      AUTH0_HS_KEY: "secret"
-      DATABASE_NAME: dhos-services-api
-      DHOS_LOCATIONS_API_HOST: http://dhos-locations-api:5000
-      DHOS_USERS_API_HOST: http://dhos-users-api:5000
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_services_api"
-    depends_on:
-      "neo4j-db":
+      "redis":
         condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
-      "dhos-users-api":
-        condition: service_healthy
-
-  dhos-activation-auth-api:
-    container_name: "dhos-activation-auth-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-activation-auth-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: dhos-activation-auth-api
-      EXTERNAL_URL: http://dhos-activation-auth-api.com:5000
-      DHOS_URL_API_HOST: http://dhos-url-api:5000
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_activation_auth_api"
-    depends_on:
-      "rabbitmq":
-        condition: service_healthy
-      "postgres-db":
-        condition: service_healthy
-      "dhos-url-api":
-        condition: service_healthy
-
-  dhos-encounters-api:
-    container_name: "dhos-encounters-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-encounters-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: dhos-encounters-api
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_encounters_api"
-    depends_on:
-      "rabbitmq":
-        condition: service_healthy
-      "postgres-db":
-        condition: service_healthy
-
-  dhos-locations-api:
-    container_name: "dhos-locations-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-locations-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      AUTH0_AUDIENCE: http://localhost/
-      DATABASE_NAME: dhos-locations-api
-      EXTERNAL_URL: http://dhos-locations-api:5000
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_locations_api"
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-
-  dhos-questions-api:
-    container_name: "dhos-questions-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-questions-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: dhos-questions-api
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_questions_api"
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-
-  dhos-observations-api:
-    container_name: "dhos-observations-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-observations-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: dhos-observations-api
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_observations_api"
-    <<: *FLASK_HEALTHCHECK
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
-  
-  gdm-bg-readings-api:
-    container_name: "gdm-bg-readings-api"
-    image: humagdmacr.azurecr.io/gdm/gdm-bg-readings-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: gdm-bg-readings-api
-      SERVER_TIMEZONE: Europe/London
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m gdm_bg_readings_api"
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
-
-  dhos-rules-api:
-    container_name: "dhos-rules-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-rules-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DHOS_RULES_ENGINE_URL: http://dhos-rules-engine:3000
-    <<: *FLASK_HEALTHCHECK
-    command: python -m dhos_rules_api
-    depends_on:
-      - "dhos-rules-engine"
 
   dhos-rules-engine:
     container_name: "dhos-rules-engine"
-    image: humagdmacr.azurecr.io/dhos/dhos-rules-engine:dev
-
-  dhos-url-api:
-    container_name: "dhos-url-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-url-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: dhos-url-api
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_url_api"
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-
-  dhos-users-api:
-    container_name: "dhos-users-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-users-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DISABLE_CREATE_USER_IN_AUTH0: "True"
-      TOKEN_URL: "https://dummy/oauth/token"
-      AUTH0_MGMT_CLIENT_ID: "dummy"
-      AUTH0_MGMT_CLIENT_SECRET: "dummy"
-      AUTH0_AUTHZ_CLIENT_ID: "doesnotmatter"
-      AUTH0_AUTHZ_CLIENT_SECRET: "dummy"
-      AUTH0_AUTHZ_WEBTASK_URL: "dummy"
-      NONCUSTOM_AUTH0_DOMAIN: "https://dummy"
-      AUTH0_CUSTOM_DOMAIN: "dev"
-      AUTH0_HS_KEY: "secret"
-      DATABASE_NAME: dhos-users-api
-    <<: *FLASK_HEALTHCHECK
-    command: >
-      bash -c "flask db upgrade
-      && python -m dhos_users_api"
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
-
-  dhos-fuego-api:
-    container_name: "dhos-fuego-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-fuego-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      DATABASE_NAME: dhos-fuego-api
-      FHIR_SERVER_BASE_URL: http://dhos-hapi-fhir-api:8080/fhir
-      FHIR_SERVER_TOKEN_URL: None
-      FHIR_SERVER_AUTH_METHOD: basic
-      FHIR_SERVER_MRN_SYSTEM: MRN
-      FHIR_SERVER_CLIENT_ID: janitor
-      FHIR_SERVER_CLIENT_SECRET: janitor
-    <<: *FLASK_HEALTHCHECK
-    command: >-
-      bash -c "flask db upgrade
-      && python -m dhos_fuego_api"
-    depends_on:
-      "postgres-db":
-        condition: service_healthy
-      "rabbitmq":
-        condition: service_healthy
-      "dhos-hapi-fhir-api":
-        condition: service_healthy
+    image: ghcr.io/huma-engineering/dhos/dhos-rules-engine:dev
+    command: "python -m dhos_rules_api"
 
   postgres-db:
     container_name: "postgres-db"
@@ -777,40 +351,15 @@ services:
     environment:
       - POSTGRES_USER=postgres-user
       - POSTGRES_PASSWORD=postgres-password
-      - POSTGRES_MULTIPLE_DATABASES="dhos-activation-auth-api","dhos-encounters-api","dhos-locations-api","dhos-questions-api","dhos-observations-api","gdm-bg-readings-api","dhos-url-api","dhos-fuego-api","dhos-hapi-fhir-api", "dhos-users-api","dhos-services-api"
+      - POSTGRES_MULTIPLE_DATABASES="gdm-bff-db","dhos-url-api"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER}"]
       interval: 2s
       timeout: 5s
       retries: 20
       start_period: 10s
-
-  neo4j-db:
-    container_name: "neo4j-db"
-    image: neo4j:3.5
     ports:
-      - "7474:7474"
-      - "7687:7687"
-    environment:
-      - NEO4J_AUTH=none
-    healthcheck:
-      test: ["CMD", "cypher-shell", "match (n) return count(n)"]
-      interval: 5s
-      timeout: 5s
-      retries: 60
-      start_period: 30s
-
-  rabbitmq:
-    container_name: "rabbitmq"
-    image: docker.io/rabbitmq:3.8-management-alpine
-    healthcheck:
-      test: rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
-      interval: 5s
-      timeout: 5s
-      retries: 60
-      start_period: 120s
-    ports:
-      - "15672"
+      - "5432:5432"
 
   wiremock:
     container_name: "wiremock"
@@ -822,31 +371,3 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
-
-  dhos-hapi-fhir-api:
-    container_name: "dhos-hapi-fhir-api"
-    image: humagdmacr.azurecr.io/dhos/dhos-hapi-fhir-api:dev
-    environment:
-      <<: *COMMON_ENVIRONMENT
-      spring.datasource.url: jdbc:postgresql://postgres-db:5432/dhos-hapi-fhir-api
-      spring.datasource.username: postgres-user
-      spring.datasource.password: postgres-password
-      spring.datasource.driverClassName: org.postgresql.Driver
-      spring.datasource.max-active: 15
-      hapi.fhir.fhir_version: R4
-
-      # web ui is necessary to be specified
-      hapi.fhir.tester.home.name: Local Tester
-      hapi.fhir.tester.home.server_address: 'http://localhost:8080/fhir'
-      hapi.fhir.tester.home.fhir_version: R4
-      hapi.fhir.server_client_id: janitor
-      hapi.fhir.server_client_secret: janitor
-    healthcheck:
-      test: echo "STARTED" || false
-      interval: 10s
-      timeout: 10s
-      retries: 10
-      start_period: 180s
-    depends_on:
-      "postgres-db":
-        condition: service_healthy

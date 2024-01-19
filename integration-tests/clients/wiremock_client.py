@@ -23,8 +23,6 @@ MEDICATIONS_DATA = [
 
 env = Env()
 expected_trustomer = env.str("CUSTOMER_CODE").lower()
-expected_api_key = env.str("POLARIS_API_KEY")
-trustomer_config = json.loads(env.str("MOCK_TRUSTOMER_CONFIG"))
 
 
 def setup_mocked_apis() -> None:
@@ -112,20 +110,6 @@ def setup_mocked_apis() -> None:
                 "urlPattern": "/dhos-telemetry/dhos/v1/clinician/(.*?)/installation",
             },
             "response": {"status": 200, "body": json.dumps({})},
-        },
-        {
-            "request": {
-                "method": "GET",
-                "url": "/dhos-trustomer/dhos/v1/trustomer/inttests",
-                "headers": {
-                    "X-Trustomer": {"equalTo": expected_trustomer},
-                    "Authorization": {"equalTo": expected_api_key},
-                },
-            },
-            "response": {
-                "status": 200,
-                "jsonBody": trustomer_config,
-            },
         },
     )
     for payload in mocks:

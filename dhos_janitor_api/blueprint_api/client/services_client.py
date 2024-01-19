@@ -11,9 +11,9 @@ def search_patients(
     active: bool = True,
 ) -> List[Dict]:
     response = make_request(
-        client=clients.dhos_services_api,
+        client=clients.gdm_bff,
         method="get",
-        url="/dhos/v1/patient/search",
+        url="/gdm/v1/internal/patient/search",
         headers={"Authorization": f"Bearer {system_jwt}"},
         params={"product_name": product_name, "active": active},
     )
@@ -27,9 +27,9 @@ def get_patients_at_location(
     system_jwt: str,
 ) -> List[Dict]:
     response = make_request(
-        client=clients.dhos_services_api,
+        client=clients.gdm_bff,
         method="get",
-        url=f"/dhos/v2/location/{location_uuid}/patient",
+        url=f"/gdm/v2/internal/location/{location_uuid}/patient",
         headers={"Authorization": f"Bearer {system_jwt}"},
         params={"product_name": product_name, "active": True},
     )
@@ -43,9 +43,9 @@ def create_patient(
     clinician_jwt: str,
 ) -> Dict:
     response = make_request(
-        client=clients.dhos_services_api,
+        client=clients.gdm_bff,
         method="post",
-        url="/dhos/v1/patient",
+        url="/gdm/v1/internal/patient",
         params={"product_name": product_name},
         json=patient_details,
         headers={"Authorization": f"Bearer {clinician_jwt}"},
@@ -60,9 +60,9 @@ def update_patient(
     jwt: str,
 ) -> None:
     make_request(
-        client=clients.dhos_services_api,
+        client=clients.gdm_bff,
         method="patch",
-        url=f"/dhos/v1/patient/{patient_id}",
+        url=f"/gdm/v1/patient/{patient_id}",
         json=patient_details,
         headers={"Authorization": f"Bearer {jwt}"},
     )
